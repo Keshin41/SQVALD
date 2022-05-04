@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}News index{% endblock %}
+
+{% block style %}
+	<style>
+        #resetFilter {
+            text-transform: none;
+            font-weight: normal;
+        }
+
+        #resetFilter:hover {
+            font-style: italic;
+            font-weight: bold;
+        }
+	</style>
+{% endblock %}
+
+{% block body %}
+	<main>
+		<h1 class="container">Nouvelles</h1>
+		<div class="container mt-3">
+			<div class="d-flex align-items-center">
+				<h2 class="d-inline">Recherche</h2>
+				<a class="text-muted mx-4 text-decoration-none" id="resetFilter" href="{{ path('news_index') }}">Supprimer
+					les filtres</a>
+			</div>
+		</div>
+		<hr class="featurette-divider mt-0 mb-3">
+		<div class="container">
+			<div class="row">
+				{{ form_start(form) }}
+				{{ form_row(form.keyword) }}
+				<div class="row">
+					<div class="col-6">
+						{{ form_row(form.fromDate) }}
+					</div>
+					<div class="col-6">
+						{{ form_row(form.toDate) }}
+					</div>
+				</div>
+				{{ form_rest(form) }}
+				{{ form_end(form) }}
+			</div>
+		</div>
+		<h2 class="container mt-0">Résultats</h2>
+		<hr class="featurette-divider mt-0 mb-0">
+
+		<div class="container">
+			{% for cNews in news %}
+				<a href="{{ path('news_show', {'slug':cNews.slug}) }}"
+				   style="color: black; text-decoration: none; padding: 0; text-transform: none">
+					<div class="member-entry fw-normal p-1">
+						<div class="row member-details w-100 m-0">
+							<div class="d-flex h-100 flex-column justify-content-between">
+								<div class="d-flex w-100 justify-content-between mb-2">
+									<h3 class="h4">{{ cNews.title }}</h3>
+									<p class="m-0">{{ cNews.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</p>
+								</div>
+								<p style="font-size: 1rem">{{ cNews.getSummary }}</p>
+								<p class="m-0">Auteur(s) :
+									{% for author in cNews.authors %}
+										{% if loop.index != 1 %}
+											{{ ', ' }}
+										{% endif %}
+										{{ author.getFullName }}
+									{% endfor %}
+								</p>
+							</div>
+						</div>
+					</div>
+				</a>
+			{% endfor %}
+		</div>
+		<div class="d-flex justify-content-center">
+			{% do news.setPageRange(5) %}
+			{{ knp_pagination_render(news, 'pagination/pagination.html.twig') }}
+		</div>
+	</main>
+{% endblock %}

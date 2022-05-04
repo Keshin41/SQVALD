@@ -1,0 +1,177 @@
+{% extends '@!EasyAdmin/page/content.html.twig' %}
+
+{% block page_title 'SQVALD Dashboard' %}
+
+{% block page_content %}
+    <div class="container">
+        <div class="row">
+            <h2 class="partenaire-title border-bottom" style="padding: 0.5rem 0">Statistiques</h2>
+            <div class="col-3 px-4">
+                <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
+                    <div class="card-text">
+                        <p class="display-3 fw-bold">{{ nbUsers }}</p>
+                        <p class="h1 fw-normal">Utilisateurs</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-4">
+                <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
+                    <div class="card-text">
+                        <p class="display-3 fw-bold">{{ nbDocuments }}</p>
+                        <p class="h1 fw-normal">Documents</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-4">
+                <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
+                    <div class="card-text">
+                        <p class="display-3 fw-bold">{{ nbEvents }}</p>
+                        <p class="h1 fw-normal">Évènements</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-4">
+                <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
+                    <div class="card-text">
+                        <p class="display-3 fw-bold">{{ nbNews }}</p>
+                        <p class="h1 fw-normal">Nouvelles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <h2 class="partenaire-title border-bottom mt-5" style="padding: 0.5rem 0">Validation</h2>
+            <div class="col-6" style="padding-bottom: 1.5rem">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center {% if not(documents) %}border-0{% endif %}" {% if documents %}style="background-color: rgba(255, 0, 0, .2)" {% endif %}>
+                        <h3 class="m-0">Documents</h3>
+                        <p class="m-0">
+                            {% if documents %}
+                            {{ documents|length }} document{% if documents|length > 1 %}s{% endif %} en attente de validation
+                            {% else %}
+                            Aucun document en attente de validation
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% if documents %}
+                        <ul class="list-group list-group-flush">
+                            {% for document in documents %}
+                                <li onmouseover="
+                                        this.style.backgroundColor = 'rgba(0,0,0, .05)';
+                                        this.style.fontWeight = 'bold';"
+                                    onmouseout="
+                                        this.style.backgroundColor = 'transparent';
+                                        this.style.fontWeight = 'normal';"
+                                    onclick="location.href='{{ ea_url()
+                                        .setController('App\\Controller\\Admin\\DocumentCrudController')
+                                        .setAction('edit')
+                                        .setEntityId(document.id) }}';" class="list-group-item" style="cursor: pointer">
+                                    <b>{{ document.categorydonnees }} : </b>{{ document.title }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-6" style="padding-bottom: 1.5rem">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center {% if not(users) %}border-0{% endif %}" {% if users %}style="background-color: rgba(255, 0, 0, .2)" {% endif %}>
+                        <h3 class="m-0">Utilisateurs</h3>
+                        <p class="m-0">
+                            {% if users %}
+                                {{ users|length }} utilisateur{% if users|length > 1 %}s{% endif %} en attente de validation
+                            {% else %}
+                                Aucun utilisateur en attente de validation
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% if users %}
+                        <ul class="list-group list-group-flush">
+                            {% for user in users %}
+                                <li onmouseover="
+                                        this.style.backgroundColor = 'rgba(0,0,0, .05)';
+                                        this.style.fontWeight = 'bold';"
+                                    onmouseout="
+                                        this.style.backgroundColor = 'transparent';
+                                        this.style.fontWeight = 'normal';"
+                                    onclick="location.href='{{ ea_url()
+                                        .setController('App\\Controller\\Admin\\UserCrudController')
+                                        .setAction('edit')
+                                        .setEntityId(user.id) }}';" class="list-group-item" style="cursor: pointer">
+                                    {{ user.getFullname }} ({{ user.email }})
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center {% if not(events) %}border-0{% endif %}" {% if events %}style="background-color: rgba(255, 0, 0, .2)" {% endif %}>
+                        <h3 class="m-0">Évènements</h3>
+                        <p class="m-0">
+                            {% if events %}
+                                {{ events|length }} évènement{% if events|length > 1 %}s{% endif %} en attente de validation
+                            {% else %}
+                                Aucun évènement en attente de validation
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% if events %}
+                        <ul class="list-group list-group-flush">
+                            {% for event in events %}
+                                <li onmouseover="
+                                        this.style.backgroundColor = 'rgba(0,0,0, .05)';
+                                        this.style.fontWeight = 'bold';"
+                                    onmouseout="
+                                        this.style.backgroundColor = 'transparent';
+                                        this.style.fontWeight = 'normal';"
+                                    onclick="location.href='{{ ea_url()
+                                        .setController('App\\Controller\\Admin\\EventCrudController')
+                                        .setAction('edit')
+                                        .setEntityId(event.id) }}';" class="list-group-item" style="cursor: pointer">
+                                    <b>{{ event.category }} : </b>{{ event.title }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center {% if not(news) %}border-0{% endif %}" {% if news %}style="background-color: rgba(255, 0, 0, .2)" {% endif %}>
+                        <h3 class="m-0">Nouvelles</h3>
+
+                        <p class="m-0">
+                            {% if news %}
+                                {{ news|length }} nouvelle{% if news|length > 1 %}s{% endif %} en attente de validation
+                            {% else %}
+                                Aucun nouvelle en attente de validation
+                            {% endif %}
+                        </p>
+                    </div>
+                    {% if news %}
+                        <ul class="list-group list-group-flush">
+                            {% for cNews in news %}
+                                <li onmouseover="
+                                        this.style.backgroundColor = 'rgba(0,0,0, .05)';
+                                        this.style.fontWeight = 'bold';"
+                                    onmouseout="
+                                        this.style.backgroundColor = 'transparent';
+                                        this.style.fontWeight = 'normal';"
+                                    onclick="location.href='{{ ea_url()
+                                        .setController('App\\Controller\\Admin\\NewsCrudController')
+                                        .setAction('edit')
+                                        .setEntityId(cNews.id) }}';" class="list-group-item" style="cursor: pointer">
+                                    {{ cNews.title }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

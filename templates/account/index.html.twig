@@ -1,0 +1,298 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace personnel{% endblock %}
+
+{% block style %}
+	<style>
+        .btn-del {
+            cursor: pointer;
+            padding: .5rem .75rem;
+            border: solid 2px #dc3545;
+            color: #dc3545;
+            background-color: transparent;
+        }
+
+        .btn-del:hover {
+            color: white;
+            background-color: #dc3545;
+        }
+
+        .required:after {
+            content: ' *';
+            color: red;
+        }
+	</style>
+{% endblock %}
+
+{% block body %}
+	<div class="container mt-5">
+		<div class="row">
+			<div class="col-3 border bg-light">
+				<h1 class="my-2">{{ app.user.getFullname }}</h1>
+				<hr class="featurette-divider my-4 mx-0">
+				<ul>
+					<li class="mb-4">Inscrit depuis
+						le {{ app.user.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</li>
+					{% if app.user.documents|length > 0 %}
+						<li class="mb-2">{{ app.user.documents|length }}
+							document{% if app.user.documents|length > 1 %}s{% endif %}
+							rédigé{% if app.user.documents|length > 1 %}s{% endif %}
+						</li>
+					{% else %}
+						<li class="mb-2">Aucun document rédigé</li>
+					{% endif %}
+
+					{% if app.user.events|length > 0 %}
+						<li class="mb-2">{{ app.user.events|length }}
+							évènement{% if app.user.events|length > 1 %}s{% endif %}
+							renseigné{% if app.user.events|length > 1 %}s{% endif %}
+						</li>
+					{% else %}
+						<li class="mb-2">Aucun évènement renseigné</li>
+					{% endif %}
+
+					{% if app.user.newstypes|length > 0 %}
+						<li class="mb-2">{{ app.user.newstypes|length }}
+							nouvelle{% if app.user.newstypes|length > 1 %}s{% endif %}
+							publiée{% if app.user.newstypes|length > 1 %}s{% endif %}
+						</li>
+					{% else %}
+						<li class="mb-2">Aucune nouvelle publiée</li>
+					{% endif %}
+				</ul>
+			</div>
+			<div class="col-9 border p-0">
+				<nav class="navbar navbar-expand bg-light justify-content-between">
+					<div>
+						<ul class="nav" role="tablist">
+							<li class="nav-item">
+								<a href="#infos-content" id="infos-tab" aria-controls="infos" data-toggle="tab"
+								   class="nav-link" role="tab"> Mes Informations</a>
+							</li>
+							<li class="nav-item">
+								<a href="#documents-content" id="documents-tab" aria-controls="documents"
+								   data-toggle="tab" class="nav-link" role="tab">Mes Documents</a>
+							</li>
+							<li class="nav-item">
+								<a href="#events-content" id="events-tab" aria-controls="events" data-toggle="tab"
+								   class="nav-link" role="tab">Mes Évènements</a>
+							</li>
+							<li class="nav-item">
+								<a href="#news-content" id="news-tab" aria-controls="news" data-toggle="tab"
+								   class="nav-link" role="tab">Mes Nouvelles</a>
+							</li>
+							<li class="nav-item">
+								<a href="#videos-content" id="videos-tab" aria-controls="videos" data-toggle="tab"
+								   class="nav-link" role="tab">Mes Vidéos</a>
+							</li>
+						</ul>
+					</div>
+					{% if is_granted('ROLE_ADMIN') %}
+						<div>
+							<a href="{{ path('admin') }}" class="nav-link">Admin</a>
+						</div>
+					{% endif %}
+				</nav>
+				<div class="tab-content px-0 pt-2">
+
+					<div id="infos-content" class="tab-pane fade active show" role="tabpanel"
+						 aria-labelledby="infos-tab">
+						<form method="post" name="enq">
+							<div class="d-flex flex-row justify-content-between px-3">
+								<h2 class="d-inline m-0">Mes informations</h2>
+								<button type="button" id="showForm" onclick="
+            						document.getElementById('showForm').style.display = 'none';
+            						document.getElementById('submitModify').style.display = 'inline';
+         							document.getElementById('firstname').removeAttribute('disabled');
+         							document.getElementById('firstnameLabel').classList.add('required');
+            						document.getElementById('lastname').removeAttribute('disabled');
+         							document.getElementById('lastnameLabel').classList.add('required');
+         							document.getElementById('phone').removeAttribute('disabled');
+            						document.getElementById('place').removeAttribute('disabled');
+            						document.getElementById('webSite').removeAttribute('disabled');
+									"
+										class="btn btn-outline-primary">Modifier
+								</button>
+								<input id="submitModify" class="btn btn-outline-primary" type="submit" value="Valider"
+									   style="display: none">
+							</div>
+							<div class="px-3">
+								<div class="row my-3">
+									<div class="form-group col-6">
+										<label id="firstnameLabel" for="firstname">Prénom</label>
+										<input id="firstname" value="{{ app.user.firstname }}" class="form-control"
+											   name="firstname" type="text" disabled required>
+									</div>
+									<div class="form-group col-6">
+										<label id="lastnameLabel" for="lastname">Nom</label>
+										<input id="lastname" value="{{ app.user.lastname }}" class="form-control"
+											   name="lastname" type="text" disabled required>
+									</div>
+
+								</div>
+								<div class="row">
+									<div class="form-group col-4">
+										<label for="phone">Tél</label>
+										<input id="phone" value="{{ app.user.phone }}" class="form-control"
+											   name="phone" type="tel" disabled>
+									</div>
+
+									<div class="form-group col-4">
+										<label for="place">Localisation</label>
+										<input id="place" value="{{ app.user.place }}" class="form-control"
+											   name="place" type="text" disabled>
+									</div>
+
+									<div class="form-group col-4">
+										<label for="webSite">Site web</label>
+										<input id="webSite" value="{{ app.user.webSite }}" class="form-control"
+											   name="webSite" type="url" disabled>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div id="documents-content" class="tab-pane fade" role="tabpanel" aria-labelledby="documents-tab">
+						<div class="d-flex flex-row justify-content-between px-3">
+							<h2 class="d-inline m-0">Mes documents</h2>
+							<a href="{{ path('documenttype_new') }}" class="btn btn-outline-primary"
+							   style="text-transform: none">Nouveau
+								document</a>
+						</div>
+						{% if app.user.documents %}
+							<small class="px-3">Cliquez sur un document pour le modifier</small>
+							<div class="list-group list-group-flush mt-3">
+								{% for document in app.user.documents|sort((a, b) => b.createdAt <=> a.createdAt) %}
+									<div class="d-flex flex-row {% if not(loop.last) %}border-bottom{% endif %}">
+										<a href="{{ path('documenttype_edit', { 'slug' : document.slug }) }}"
+
+										   class="list-group-item list-group-item-action flex-column align-items-start border-0"
+										   style="text-transform: none; font-weight: normal">
+											{% if not(document.isActive) %}
+												<p class="text-warning m-0">Ce document est en attente de validation par
+													un
+													administrateur</p>
+											{% endif %}
+											<div class="d-flex w-100 justify-content-between mb-2">
+												<h3 class="h5">[{{ document.categorydonnees }}
+													] {{ document.title }}</h3>
+												<small>{{ document.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</small>
+											</div>
+											<p>{{ document.getSummary }}</p>
+											<small>Auteur(s) :
+												{% for author in document.author %}
+													{% if loop.index != 1 %}
+														{{ ', ' }}
+													{% endif %}
+													{{ author.getFullName }}
+												{% endfor %}
+											</small>
+										</a>
+										{{ include('documenttype/_delete_form.html.twig') }}
+									</div>
+								{% endfor %}
+							</div>
+						{% else %}
+							<p>Aucun document rédigé</p>
+						{% endif %}
+					</div>
+
+					<div id="events-content" class="tab-pane fade" role="tabpanel" aria-labelledby="events-tab">
+						<div class="d-flex flex-row justify-content-between px-3">
+							<h2 class="d-inline m-0">Mes Évènements</h2>
+							<a href="{{ path('event_new') }}" class="btn btn-outline-primary"
+							   style="text-transform: none">Nouvel
+								évènement</a>
+						</div>
+						{% if app.user.events %}
+							<small class="px-3">Cliquez sur un évènement pour le modifier</small>
+							<div class="list-group list-group-flush mt-3">
+								{% for event in app.user.events|sort((a, b) => b.createdAt <=> a.createdAt) %}
+									<div class="d-flex flex-row {% if not(loop.last) %}border-bottom{% endif %}">
+										<a href="{{ path('event_edit', { 'slug' : event.slug }) }}"
+
+										   class="list-group-item list-group-item-action flex-column align-items-start
+										border-0"
+										   style="text-transform: none; font-weight: normal">
+											{% if not(event.isActive) %}
+												<p class="text-warning m-0">Cet évènement est en attente de validation
+													par
+													un
+													administrateur</p>
+											{% endif %}
+											<div class="d-flex w-100 justify-content-between mb-0">
+												<h3 class="h5 m-0">[{{ event.category }}] {{ event.title }}</h3>
+												<small>{{ event.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</small>
+											</div>
+											<p class="mb-2"><small>Du {{ event.dateBegin|format_datetime(locale='fr',pattern='d MMM Y') }} au {{ event.dateEnd|format_datetime(locale='fr',pattern='d MMM Y') }}</small></p>
+											<p style="font-size: 1rem">{{ event.getSummary }}</p>
+											<small>Auteur(s) :
+												{% for author in event.author %}
+													{% if loop.index != 1 %}
+														{{ ', ' }}
+													{% endif %}
+													{{ author.getFullName }}
+												{% endfor %}
+											</small>
+										</a>
+										{{ include('event/_delete_form.html.twig') }}
+									</div>
+								{% endfor %}
+							</div>
+						{% else %}
+							<p>Aucun évènement renseigné</p>
+						{% endif %}
+					</div>
+
+					<div id="news-content" class="tab-pane fade" role="tabpanel" aria-labelledby="news-tab">
+						<div class="d-flex flex-row justify-content-between px-3">
+							<h2 class="d-inline m-0">Mes Nouvelles</h2>
+							<a href="{{ path('news_new') }}" class="btn btn-outline-primary"
+							   style="text-transform: none">Nouvelle nouvelle</a>
+						</div>
+						{% if app.user.newstypes %}
+							<small class="px-3">Cliquez sur une nouvelle pour la modifier</small>
+							<div class="list-group list-group-flush mt-3">
+								{% for cNews in app.user.newstypes|sort((a, b) => b.createdAt <=> a.createdAt) %}
+									<div class="d-flex flex-row {% if not(loop.last) %}border-bottom{% endif %}">
+										<a href="{{ path('news_edit', { 'slug' : cNews.slug }) }}"
+
+										   class="list-group-item list-group-item-action flex-column align-items-start border-0"
+										   style="text-transform: none; font-weight: normal">
+											{% if not(cNews.isActive) %}
+												<p class="text-warning m-0">Ce document est en attente de validation par
+													un
+													administrateur</p>
+											{% endif %}
+											<div class="d-flex w-100 justify-content-between mb-2">
+												<h3 class="h5">{{ cNews.title }}</h3>
+												<small>{{ cNews.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</small>
+											</div>
+											<p>{{ cNews.getSummary }}</p>
+											<small>Auteur(s) :
+												{% for author in cNews.authors %}
+													{% if loop.index != 1 %}
+														{{ ', ' }}
+													{% endif %}
+													{{ author.getFullName }}
+												{% endfor %}
+											</small>
+										</a>
+										{{ include('news/_delete_form.html.twig') }}
+									</div>
+								{% endfor %}
+							</div>
+						{% else %}
+							<p>Aucune nouvelle publiée</p>
+						{% endif %}
+					</div>
+
+					<div id="videos-content" class="tab-pane fade" role="tabpanel" aria-labelledby="videos-tab">
+						<h2>Mes vidéos</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
