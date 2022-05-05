@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Table(name="member")
  * @UniqueEntity(fields={"email"}, message="Cet email est déjà utilisé")
  * @Vich\Uploadable
  */
