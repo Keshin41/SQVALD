@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\PartnerRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -47,6 +49,16 @@ class Partner
 	 */
 	private $updateAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=User::class, mappedBy="partner")
+     */
+    private $users;
+
+    public function __construct()
+    {
+        $this->users = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,23 +101,53 @@ class Partner
     }
 
 	public function getUpdateAt(): \DateTime
-	{
-		return $this->updateAt;
-	}
+                        	{
+                        		return $this->updateAt;
+                        	}
 
 	public function setUpdateAt(\DateTime $updateAt): void
-	{
-		$this->updateAt = $updateAt;
-	}
+                        	{
+                        		$this->updateAt = $updateAt;
+                        	}
 
 	public function getIllustrationFile(): File
-	{
-		return $this->illustrationFile;
-	}
+                        	{
+                        		return $this->illustrationFile;
+                        	}
 
 	public function setIllustrationFile(File $illustrationFile = null): void
-	{
-		$this->illustrationFile = $illustrationFile;
-		if ($illustrationFile) $this->updateAt = new \DateTime('now');
-	}
+                        	{
+                        		$this->illustrationFile = $illustrationFile;
+                        		if ($illustrationFile) $this->updateAt = new \DateTime('now');
+                        	}
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->setPartner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getPartner() === $this) {
+                $user->setPartner(null);
+            }
+        }
+
+        return $this;
+    }
 }

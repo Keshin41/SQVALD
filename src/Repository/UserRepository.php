@@ -45,6 +45,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 			->getResult();
 	}
 
+	public function findByPartner($partners) {
+		return $this->createQueryBuilder('u')
+			->andWhere('u.isValide = true')
+			->andWhere('u.isVerified = true')
+			->andWhere('u.partner IN (:partners)')
+			->setParameter('partners', $partners)
+			->getQuery()
+			->getResult();
+	}
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

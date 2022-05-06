@@ -53,6 +53,18 @@
         #flashes>div:hover {
             cursor: pointer;
         }
+
+        .dropdown-menu {
+            padding: 0;
+        }
+
+        .dropdown-divider {
+            margin: 0;
+        }
+
+        .dropdown-item {
+            padding: 1rem;
+        }
     </style>
 
 </head>
@@ -60,7 +72,7 @@
 <header>
     <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light" style="padding-left: 12px; padding-right: 12px">
 
-        <a class="navbar-brand" href="/">Logo</a>
+        <a class="navbar-brand" href="/">SQVALD</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
                 aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -96,12 +108,17 @@
                         <a class="dropdown-item" href="#">Demos</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="#">Capture</a>
-
                     </div>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('show_membre') }}">Membres</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                       aria-haspopup="true" aria-expanded="false">Consortium</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ path('partners_index') }}">Partenaires</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ path('show_membre') }}">Membre</a>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -113,6 +130,7 @@
             {% endif %}
         </div>
     </nav>
+
     <div class="container-fluid" id="flashes">
         {% for flash in app.flashes('success') %}
             <div class="alert alert-success my-2" onclick="this.style.display = 'none'">{{ flash }}</div>

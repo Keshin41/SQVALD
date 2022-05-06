@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Classe\Mail;
 use App\Classe\SearchMembre;
 use App\Entity\User;
+use App\Form\CalendarType;
 use App\Form\RegistrationFormType;
 use App\Form\ResendVerifyEmailForm;
 use App\Form\SearchMembreType;
@@ -200,30 +201,26 @@ class RegistrationController extends AbstractController
      */
     public function showMembre(Request $request, PaginatorInterface $paginator):Response
     {
-		$this->denyAccessUnlessGranted('ROLE_USER');
+//		$this->denyAccessUnlessGranted('ROLE_USER');
 
-        $users = $this->entityManager->getRepository(User::class)->findBy([
-            'isValide' => true
-        ]);
+        $form = $this->createForm(SearchMembreType::class, null, ['action' => $this->generateUrl('show_membre') ,'method' => 'GET']);
 
-        $search = new SearchMembre();
-        $form = $this->createForm(SearchMembreType::class, $search);
+		$partner = $request->query->get('partner');
 
-        //recuperation de la requete envoyé par url
-        $form->handleRequest($request);
-        if($form->isSubmitted()&&$form->isValid()){
-            $users = $this->entityManager->getRepository(User::class)->findwithSearchMembre($search);
-        }else{
-            //recuperation de tous les membres en passant par le repository de la classe en question
-            $users= $this->entityManager->getRepository(User::class)->findBy([
-                'isValide' => true
-            ]);
-        }
-        $users = $paginator->paginate(
+		$form->handleRequest($request);
+
+		if ($partner != null) {
+			$users = $this->entityManager->getRepository(User::class)->findByPartner($partner);
+		} else {
+			$users = $this->entityManager->getRepository(User::class)->findBy(['isValide' => true]);
+		}
+
+		$users = $paginator->paginate(
             $users, /* query NOT result */
             $request->query->getInt('page', 1)/*page number*/,
-            4/*limit per page*/
+            5/*limit per page*/
         );
+
         return $this->render('show/indexMembre.html.twig', [
             'users' => $users,
             'form'=>$form->createView()
