@@ -3,288 +3,138 @@
 {% block title %} Accueil {% endblock %}
 
 {% block body %}
-    <main>
-        {# Caroussel Data #}
-        <div id="dataCarousel" class="carousel slide carousel-dark mb-0" data-bs-ride="carousel">
-            <div class="carousel-inner border-0">
-                {# News #}
-                {% for cNews in news %}
-                    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}"
-                         style="background-color: #4ade80">
-                        <div class="carousel-caption text-start carousel-responsive justify-content-center mb-0" style="padding: 0.5rem 15%; position:initial;">
-                            <div class="col-lg-12 partenaire-txt">
-                                <h4 class="partenaire-title">Dernière nouvelle</h4>
-                                <p>{{ cNews.title }}</p>
-                                <p>{{ cNews.resume }}</p>
-                                <p>{{ cNews.createdAt|date('d-m-Y') }}</p>
-                                <p>
-                                    {% for author in cNews.authors %}
-                                        {% if loop.index != 1 %}
-                                            {{ ', ' }}
-                                        {% endif %}
-                                        {{ author.getFullName }}
-                                    {% endfor %}
-                                </p>
-{#                                <p><a class="link" href="{{ path('showNews', {'id' : cNews.id}) }}">Découvrir</a></p>#}
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                 Event
-                {% for event in events %}
-                    <div class="carousel-item" style="background-color: skyblue">
-                        <div class="carousel-caption text-start carousel-responsive justify-content-center mb-0" style="padding: 0.5rem 15%; position:initial;">
-                            <div class="col-lg-12 partenaire-txt">
-                                <h4 class="partenaire-title">Prochain évènement</h4>
-                                <p>{{ event.title }}</p>
-                                <p>Du {{ event.dateBegin | date("d/m/y") }} au {{ event.dateEnd | date("d/m/y") }}</p>
-                                <p>{{ event.place }}</p>
-                                <p>{{ event.resume }}</p>
-                                <p>
-                                    {% for author in event.author %}
-                                        {% if loop.index != 1 %}
-                                            {{ ', ' }}
-                                        {% endif %}
-                                        {{ author.getFullName }}
-                                    {% endfor %}
-                                </p>
-                                 <p><a class="link" href="{{ path('showEvent', {'slug' : event.slug}) }}">Découvrir</a></p>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-                {# Document #}
-                {% for document in documents|slice(0, 1) %}
-                    <div class="carousel-item" style="background-color: palevioletred">
-                        <div class="carousel-caption text-start carousel-responsive justify-content-center mb-0" style="padding: 0.5rem 15%; position:initial;">
-                            <div class="col-lg-12 partenaire-txt">
-                                <h4 class="partenaire-title mt-0">Dernier document</h4>
-                                <p class="mt-0">{{ document.title }}</p>
-                                <p>{{ document.createdAt | date("d/m/y") }}</p>
-                                <p>{{ document.resume }}</p>
-                                <p>
-                                    {% for author in document.author %}
-                                        {% if loop.index != 1 %}
-                                            {{ ', ' }}
-                                        {% endif %}
-                                        {{ author.getFullName }}
-                                    {% endfor %}
-                                </p>
-                                 <p><a class="link" href="{{ path('showDocument', {'slug':document.slug}) }}">Lire</a></p>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+	<main>
+		{# Caroussel Data #}
+		<div id="dataCarousel" class="carousel slide carousel-dark mb-0" data-bs-ride="carousel">
+			<div class="carousel-inner border-0">
+				{# News #}
+				{% for cNews in news %}
+					<div class="carousel-item {% if loop.index == 1 %}active{% endif %}"
+						 style="background-color: #4ade80">
+						<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
+							 style="padding: 0.5rem 15%; position:initial;">
+							<div class="col-lg-12 partenaire-txt">
+								<h4 class="partenaire-title">Dernière nouvelle</h4>
+								<p>{{ cNews.title }}</p>
+								<p>{{ cNews.resume }}</p>
+								<p>{{ cNews.createdAt|date('d-m-Y') }}</p>
+								<p>
+									{% for author in cNews.authors %}
+										{% if loop.index != 1 %}
+											{{ ', ' }}
+										{% endif %}
+										{{ author.getFullName }}
+									{% endfor %}
+								</p>
+								{# <p><a class="link" href="{{ path('showNews', {'id' : cNews.id}) }}">Découvrir</a></p> #}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+				Event
+				{% for event in events %}
+					<div class="carousel-item" style="background-color: skyblue">
+						<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
+							 style="padding: 0.5rem 15%; position:initial;">
+							<div class="col-lg-12 partenaire-txt">
+								<h4 class="partenaire-title">Prochain évènement</h4>
+								<p>{{ event.title }}</p>
+								<p>Du {{ event.dateBegin | date("d/m/y") }} au {{ event.dateEnd | date("d/m/y") }}</p>
+								<p>{{ event.place }}</p>
+								<p>{{ event.resume }}</p>
+								<p>
+									{% for author in event.author %}
+										{% if loop.index != 1 %}
+											{{ ', ' }}
+										{% endif %}
+										{{ author.getFullName }}
+									{% endfor %}
+								</p>
+								<p><a class="link" href="{{ path('showEvent', {'slug' : event.slug}) }}">Découvrir</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+				{# Document #}
+				{% for document in documents|slice(0, 1) %}
+					<div class="carousel-item" style="background-color: palevioletred">
+						<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
+							 style="padding: 0.5rem 15%; position:initial;">
+							<div class="col-lg-12 partenaire-txt">
+								<h4 class="partenaire-title mt-0">Dernier document</h4>
+								<p class="mt-0">{{ document.title }}</p>
+								<p>{{ document.createdAt | date("d/m/y") }}</p>
+								<p>{{ document.resume }}</p>
+								<p>
+									{% for author in document.author %}
+										{% if loop.index != 1 %}
+											{{ ', ' }}
+										{% endif %}
+										{{ author.getFullName }}
+									{% endfor %}
+								</p>
+								<p><a class="link" href="{{ path('showDocument', {'slug':document.slug}) }}">Lire</a>
+								</p>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#dataCarousel" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#dataCarousel" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+		<hr class="featurette-divider my-0">
+
+		{# Le text de la home page #}
+		<div class="container py-4">
+            <div class="row">
+                <h1 class="border-bottom my-3 h2">Le projet SQVALD</h1>
+                <p style="font-size: 1.25rem">La transformation numérique de la société et l’irruption des outils “intelligents” dans la vie quotidienne ont progressivement et activement changé le rapport des patients à la médecine. Ces changements sont marqués par le développement de l’e-santé à travers le déploiement d’outils numériques sur le plan national et régional. La région Centre Val de Loire s’est fortement positionnée dans ce domaine à travers le déploiement de la plateforme e-parcours et ses nombreux services d’accompagnement pour les patients et les soignants. D’un autre côté, les patients et leurs aidants sont de plus en plus entourés d’outils intelligents qui leur sont propres (smartphone, montres connectées, etc.) ou présents dans les structures de soins (appareil de suivi ou de diagnostic, etc.) ou même dans le contexte plus global du déploiement de l’Internet des Objets et villes intelligentes. L’objectif de ce projet est de mettre en place une approche innovante d’accompagnement continu des patients hors mûrs en complémentarité avec la démarche e-santé de l’ARS et en articulation notamment avec la plateforme e-parcours. Il s’agit d’exploiter le contexte technologique pour proposer au patient un suivi régulier et non-intrusif en cohérence avec son parcours de soins, lui permettant ainsi de prendre en main le contrôle de l’évolution de son état de santé et de contribuer à l’amélioration de sa qualité de vie. En coordination avec les professionnels de santé, ce suivi pourra compléter leur vision sur l’évolution du patient entre deux rendez-vous de suivi prévus dans le parcours de soins et renforcer ainsi la coordination dans l’intérêt du patient et de l’amélioration de sa qualité de vie.</p>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#dataCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#dataCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-        <hr class="featurette-divider mt-0">
+		</div>
 
-        {# Le text de la home page #}
-        <div class="container pb-4 pt-4">
-
-            {% for flash in app.flashes('success') %}
-                <div class="alert alert-success">{{ flash }}</div>
-            {% endfor %}
-
-            <div class="row gx-5">
-
-                <div class="col-lg-8">
-
-                    <div class="row featurette">
-                        <div class="col-md-7">
-                            <h2 class="heading mb-4">And lastly, this one. <span class="text-muted">Checkmate.</span>
-                            </h2>
-                            <p class="lead">And yes, this is the last block of representative placeholder content.
-                                Again, not really intended to be actually read, simply here to give you a better view of
-                                what this would look like with some actual content. Your content.</p>
-                            <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                                dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                                Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-                                mollit anim id est laborum."</p>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="about-container">
-                                <img class="about" src="{{ asset('assets/img/img-test.png') }}">
-                            </div>
-                        </div>
-                    </div>
-
-
-                </div>
-
-                <!-- NEWS
-                        ================================================== -->
-
-
-                <div class="col-lg-4">
-
-                    <h3 class="pb-2 text-start text-muted">News</h3>
-
-                    <div class="news-display">
-
-                        <!-- NEWS -->
-                        {% if news %}
-                            {% for cNews in news %}
-                                <div class="news-container">
-                                    <div class="news-txt">
-                                        <p><a href="{{ path('news_show', {'slug' : cNews.slug}) }}">{{ cNews.title }}</a></p>
-                                        <time style="padding-top: 10px">{{ cNews.createdAt|date("m/d/Y") }} </time>
-                                    </div>
-                                </div>
-{#                                <div><span>  <a href="{{ path('show_nouvelle') }}" style="font-style: italic">Voir toutes les News</a></span>#}
-                                </div>
-                            {% endfor %}
-                        {% else %}
-                            <p>Aucune Nouvelle !</p>
-                        {% endif %}
-
-                    </div>
-                    <!-- END NEWS -->
-                </div>
-            </div>
-        </div>
-        <hr class="featurette-divider">
-        <!-- ARTICLES
-        ================================================== -->
-
-        <div class="container marketing">
-
-            <!-- Three columns of text -->
-            <div class="row gx-5">
-
-                <!--Article-->
-                {% for document in documents %}
-                    <div class="col-lg-4">
-
-                        <div class=" article">
-                            <div class="img-container">
-                                <img class="img-crop" src="{{ asset('assets/img/article-1.jpg') }}">
-                            </div>
-                            <a href="{{ path('showDocument', {'slug':document.slug}) }}"><h5
-                                        class="card-title"> {{ document.title }}</h5></a>
-
-                            <p class="content-article"> Auteur(s) :
-                                {% for author in document.author %}
-                                    {% if loop.index != 1 %}
-                                        {{ ', ' }}
-                                    {% endif %}
-                                    {{ author.getFullName }}
-                                {% endfor %}
-                            </p>
-                            <p><a class="btn btn-outline-secondary"
-                                  href="{{ path('showDocument', {'slug':document.slug}) }}">Voir l'article</a></p>
-
-
-                        </div>
-
-                    </div>
-                {% endfor %}
-                <div>
-{#                    <span><a href="{{ path('show_article') }}"#}
-{#                             style="font-style: italic">Voir tous les articles</a></span>#}
-                </div>
-                <!--End Article-->
-
-
-            </div><!-- /.row -->
-
-
-            <!-- START THE FEATURETTES -->
-
-            <hr class="featurette-divider">
-
-            <div class="row featurette gx-5">
-                {# {% for event in events %} #}
-                {# <div class="col-lg-6 event"> #}
-                {# <h2 class="heading"><span>Evénements</span></h2> #}
-                {# <div class="widget-49-date-primary"> #}
-                {# <span class="widget-49-date-day">Du {{ event.startCreatedAt | date("d/m/y") }} au {{ event.endCreatedAt | date("d/m/y") }}</span> #}
-                {# </div> #}
-                {# <div class="widget-49-meeting-info"> #}
-                {# <span class="widget-49-pro-title"> #}
-                {# <a href="{{ path('showNews', {'id':event.id}) }}">{{ event.title }}</a> #}
-                {# </span> #}
-                {# </div> #}
-                {# <p class="lead">{{ event.resume }}</p> #}
-                {# <a href="{{ path('show_evenement') }}">Voir tous les événements</a> #}
-                {# </div> #}
-                {# {% endfor %} #}
-                <div class="col-lg-6 event">
-                    <h2 class="heading"><span>Evénements</span></h2>
-                    <div class="widget-49-date-primary">
-                        <span class="widget-49-date-day">Du {{ events|first.dateBegin | date("d/m/y") }} au {{ events|first.dateEnd | date("d/m/y") }}</span>
-                    </div>
-                    <div class="widget-49-meeting-info">
-                        <span class="widget-49-pro-title">
-                            <a href="{{ path('news_show', {'slug' : events|first.slug}) }}">{{ events|first.title }}</a>
-                        </span>
-                    </div>
-                    <p class="lead">{{ events|first.resume }}</p>
-{#                    <a href="{{ path('show_evenement') }}">Voir tous les événements</a>#}
-                </div>
-            </div>
-            <!-- Alternate design
-                <hr class="featurette-divider">
-
-                <div class="row featurette">
-                  <div class="col-md-7 order-md-2">
-                    <h2 class="featurette-heading">Oh yeah, it’s that good. <span class="text-muted">See for yourself.</span></h2>
-                    <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this layout would work with some actual real-world content in place.</p>
-                  </div>
-                  <div class="col-md-5 order-md-1">
-                    <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
-
-                  </div>
-                </div>
-            -->
-            <hr class="featurette-divider">
-        </div>
-
-        {# Caroussel Partenaires #}
-        <h4 class="partenaire-title border-bottom" style="padding: 0 0 0.5rem 2rem">Nos partenaires</h4>
-        <div id="partnerCarousel" class="carousel slide carousel-dark mb-0" data-bs-ride="carousel">
-            <div class="carousel-inner border-0">
-                {% for partner in partners %}
-                    <div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
-                        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-                             aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <rect width="100%" height="100%" fill="#FFF"/>
-                        </svg>
-                        <div class="carousel-caption text-start carousel-responsive justify-content-center mb-0 row">
-                            <div class="col-lg-5">
-                                <div class="partenaire-img">
-                                    <img class="img-resize" src="{{ vich_uploader_asset(partner, 'illustrationFile') }}"
-                                         alt="{{ partner.content }}">
-                                </div>
-                            </div>
-                            <div class="col-lg-7 partenaire-txt">
-                                <p>{{ partner.content }}</p>
-                                <p><a class="link" href="{{ partner.btnUrl }}">Découvrir</a></p>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#partnerCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#partnerCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-    </main>
+		{# Caroussel Partenaires #}
+		<h4 class="partenaire-title border-bottom" style="padding: 0 0 0.5rem 2rem">Nos partenaires</h4>
+		<div id="partnerCarousel" class="carousel slide carousel-dark mb-0" data-bs-ride="carousel">
+			<div class="carousel-inner border-0">
+				{% for partner in partners %}
+					<div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+						<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
+							 aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
+							<rect width="100%" height="100%" fill="#FFF"/>
+						</svg>
+						<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0 row">
+							<div class="col-lg-5">
+								<div class="partenaire-img">
+									<img class="img-resize" src="{{ vich_uploader_asset(partner, 'illustrationFile') }}"
+										 alt="{{ partner.content }}">
+								</div>
+							</div>
+							<div class="col-lg-7 partenaire-txt">
+								<p>{{ partner.content }}</p>
+								<p><a class="link" href="{{ partner.btnUrl }}">Découvrir</a></p>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			<button class="carousel-control-prev" type="button" data-bs-target="#partnerCarousel" data-bs-slide="prev">
+				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<button class="carousel-control-next" type="button" data-bs-target="#partnerCarousel" data-bs-slide="next">
+				<span class="carousel-control-next-icon" aria-hidden="true"></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+	</main>
 
 
 
