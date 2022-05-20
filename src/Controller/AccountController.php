@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\PartnerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,11 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
  */
 class AccountController extends AbstractController
 {
+
     /**
      * @Route("/", name="account")
      */
-    public function index(Request $request): Response
+    public function index(Request $request, PartnerRepository $partnerRepository): Response
     {
 		if ($request->getMethod() == Request::METHOD_POST) {
 			$user = $this->getUser();
@@ -28,6 +30,8 @@ class AccountController extends AbstractController
 			$newPhone = $request->request->get('phone');
 			$newPlace = $request->request->get('place');
 			$newWebSite = $request->request->get('webSite');
+			$partner_id = $request->request->get('partner');
+			$partner = $partnerRepository->find($partner_id);
 			if ($user->getFirstname() != $newFirstname) $user->setFirstname($newFirstname);
 			if ($user->getLastname() != $newLastname) $user->setLastname($newLastname);
 			if ($user->getPhone() != $newPhone) {
@@ -42,10 +46,16 @@ class AccountController extends AbstractController
 				if (empty($newWebSite)) $user->setWebSite(null);
 				else $user->setWebSite($newWebSite);
 			}
+			if ($user->getPartner() !== $partner) {
+				if (empty($partner)) $user->setPartner(null);
+				else $user->setPartner($partner);
+			}
 
 			$this->getDoctrine()->getManager()->flush();
 		}
 
-        return $this->render('account/index.html.twig');
+        return $this->render('account/index.html.twig', [
+			'partners' => $partnerRepository->findAll()
+		]);
     }
 }

@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Video;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
@@ -19,16 +20,21 @@ class VideoCrudController extends AbstractCrudController
 
 	public function configureFields(string $pageName): iterable
 	{
-		// TODO vich upload video et faire crud entité
 		return [
 			IdField::new('id')->hideOnForm(),
 			TextField::new('title')->setRequired(true),
-			TextField::new('link'),
+			TextField::new('type')->onlyOnIndex(),
+			TextField::new('link')
+				->hideOnIndex()
+				->setRequired(false),
 			ImageField::new('src')
+				->hideOnIndex()
 				->setBasePath('uploads/videos/')
 				->setUploadDir('public/uploads/videos/')
 				->setUploadedFileNamePattern('[randomhash].[extension]')
 				->setRequired(false),
+			BooleanField::new('isActive')
+				->setLabel("Activé ?"),
 		];
 	}
 }

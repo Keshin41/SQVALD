@@ -2,6 +2,9 @@
 
 namespace App\Twig;
 
+use App\Entity\Document;
+use App\Entity\Event;
+use App\Entity\News;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -21,7 +24,11 @@ class AppExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('pluralize', [$this, 'doSomething']),
+			new TwigFunction('pluralize', [$this, 'doSomething']),
+			new TwigFunction('shuffle', [$this, 'shuffle']),
+			new TwigFunction('isDocument', [$this, 'isDocument']),
+			new TwigFunction('isEvent', [$this, 'isEvent']),
+			new TwigFunction('isNews', [$this, 'isNews']),
         ];
     }
 
@@ -31,4 +38,25 @@ class AppExtension extends AbstractExtension
         $str = $count === 1 ? $singular : $plural;
         return "$count $str";
     }
+
+	public function shuffle(array $array): array
+	{
+		shuffle($array);
+		return $array;
+	}
+
+	public function isDocument($var): bool
+	{
+		return $var instanceof Document;
+	}
+
+	public function isEvent($var): bool
+	{
+		return $var instanceof Event;
+	}
+
+	public function isNews($var): bool
+	{
+		return $var instanceof News;
+	}
 }

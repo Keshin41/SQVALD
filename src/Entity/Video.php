@@ -54,9 +54,25 @@ class Video
 	 */
 	private $title;
 
+	/**
+	 * @ORM\Column(type="datetime")
+	 */
+	private $createdAt;
+
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	private $isActive = false;
+
+	/**
+	 * @ORM\Column(type="string", length=255)
+	 */
+	private $slug;
+
 	public function __construct()
 	{
 		$this->authors = new ArrayCollection();
+		$this->createdAt = new \DateTime();
 		$this->updateAt = new \DateTime();
 	}
 
@@ -156,5 +172,58 @@ class Video
 		$this->title = $title;
 
 		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getCreatedAt()
+	{
+		return $this->createdAt;
+	}
+
+	/**
+	 * @param mixed $createdAt
+	 */
+	public function setCreatedAt($createdAt): void
+	{
+		$this->createdAt = $createdAt;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isActive(): bool
+	{
+		return $this->isActive;
+	}
+
+	/**
+	 * @param bool $isActive
+	 */
+	public function setIsActive(bool $isActive): void
+	{
+		$this->isActive = $isActive;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getSlug()
+	{
+		return $this->slug;
+	}
+
+	/**
+	 * @param mixed $slug
+	 */
+	public function setSlug($slug): void
+	{
+		$this->slug = $slug;
+	}
+
+	public function getType(): string
+	{
+		return $this->src == null ? "Externe" : "Interne";
 	}
 }

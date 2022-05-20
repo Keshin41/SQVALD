@@ -35,12 +35,15 @@ class DocumentsType extends AbstractType
 			->add('resume', TextareaType::class, ['required' => false, 'label' => 'Résumé'])
 			->add('content', CKEditorType::class, ['required' => false,'label' => 'Contenu'])
 			->add('imageFile', VichImageType::class, [
+				'delete_label' => 'Supprimer ?',
 				'label' => 'Image',
 				'required' => false,
 				'allow_delete' => true,
 				'download_uri' => false,
+				'download_link' => false,
 			])
 			->add('brochureFile', VichFileType::class, [
+				'delete_label' => 'Supprimer ?',
 				'label' => 'Document',
 				'required' => false,
 				'allow_delete' => true,

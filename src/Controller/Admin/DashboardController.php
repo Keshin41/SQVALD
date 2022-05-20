@@ -19,6 +19,7 @@ use App\Repository\DocumentRepository;
 use App\Repository\EventRepository;
 use App\Repository\NewsRepository;
 use App\Repository\UserRepository;
+use App\Repository\VideoRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -28,21 +29,24 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DashboardController extends AbstractDashboardController
 {
-	protected $documentRepository;
-	protected $eventRepository;
-	protected $newsRepository;
+	private $documentRepository;
+	private $eventRepository;
+	private $newsRepository;
 	private $userRepository;
+	private $videoRepository;
 
 	public function __construct(
 		DocumentRepository $documentRepository,
 		EventRepository    $eventRepository,
 		NewsRepository     $newsRepository,
-		UserRepository     $userRepository)
+		UserRepository     $userRepository,
+		VideoRepository    $videoRepository)
 	{
 		$this->documentRepository = $documentRepository;
 		$this->eventRepository = $eventRepository;
 		$this->newsRepository = $newsRepository;
 		$this->userRepository = $userRepository;
+		$this->videoRepository = $videoRepository;
 	}
 
 	/**
@@ -58,7 +62,9 @@ class DashboardController extends AbstractDashboardController
 			'events' => $this->eventRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']),
 			'nbEvents' => $this->eventRepository->count([]),
 			'news' => $this->newsRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']),
-			'nbNews' => $this->newsRepository->count([])
+			'nbNews' => $this->newsRepository->count([]),
+			'videos' => $this->videoRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']),
+			'nbVideos' => $this->videoRepository->count([])
 		]);
 	}
 
@@ -76,14 +82,14 @@ class DashboardController extends AbstractDashboardController
 		yield MenuItem::linkToCrud('Tous les documents', 'fas fa-file', Document::class);
 		yield MenuItem::linkToCrud('Catégories', 'fas fa-list', CategoryDonnees::class);
 
-		yield MenuItem::section('Ėvènements');
+		yield MenuItem::section('Évènements');
 		yield MenuItem::linkToCrud('Tous les évènements', 'fas fa-calendar', Event::class);
 		yield MenuItem::linkToCrud('Catégories', 'fas fa-list', CategoryNews::class);
 
 		yield MenuItem::section('Nouvelles');
 		yield MenuItem::linkToCrud('Toutes les nouvelles', 'fas fa-newspaper', News::class);
 
-		yield MenuItem::section();
+		yield MenuItem::section('Vidéos');
 		yield MenuItem::linkToCrud('Toutes les vidéos', 'fas fa-video', Video::class);
 
 		yield MenuItem::section();

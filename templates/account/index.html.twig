@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Espace personnel{% endblock %}
+{% block title %}SQVALD | Espace personnel{% endblock %}
 
 {% block style %}
 	<style>
@@ -59,6 +59,15 @@
 					{% else %}
 						<li class="mb-2">Aucune nouvelle publiée</li>
 					{% endif %}
+
+					{% if app.user.videos|length > 0 %}
+						<li class="mb-2">{{ app.user.videos|length }}
+							vidéo{% if app.user.newstypes|length > 1 %}s{% endif %}
+							postée{% if app.user.newstypes|length > 1 %}s{% endif %}
+						</li>
+					{% else %}
+						<li class="mb-2">Aucune vidéo postée</li>
+					{% endif %}
 				</ul>
 			</div>
 			<div class="col-9 border p-0">
@@ -95,202 +104,12 @@
 				</nav>
 				<div class="tab-content px-0 pt-2">
 
-					<div id="infos-content" class="tab-pane fade active show" role="tabpanel"
-						 aria-labelledby="infos-tab">
-						<form method="post" name="enq">
-							<div class="d-flex flex-row justify-content-between px-3">
-								<h2 class="d-inline m-0">Mes informations</h2>
-								<button type="button" id="showForm" onclick="
-            						document.getElementById('showForm').style.display = 'none';
-            						document.getElementById('submitModify').style.display = 'inline';
-         							document.getElementById('firstname').removeAttribute('disabled');
-         							document.getElementById('firstnameLabel').classList.add('required');
-            						document.getElementById('lastname').removeAttribute('disabled');
-         							document.getElementById('lastnameLabel').classList.add('required');
-         							document.getElementById('phone').removeAttribute('disabled');
-            						document.getElementById('place').removeAttribute('disabled');
-            						document.getElementById('webSite').removeAttribute('disabled');
-									"
-										class="btn btn-outline-primary">Modifier
-								</button>
-								<input id="submitModify" class="btn btn-outline-primary" type="submit" value="Valider"
-									   style="display: none">
-							</div>
-							<div class="px-3">
-								<div class="row my-3">
-									<div class="form-group col-6">
-										<label id="firstnameLabel" for="firstname">Prénom</label>
-										<input id="firstname" value="{{ app.user.firstname }}" class="form-control"
-											   name="firstname" type="text" disabled required>
-									</div>
-									<div class="form-group col-6">
-										<label id="lastnameLabel" for="lastname">Nom</label>
-										<input id="lastname" value="{{ app.user.lastname }}" class="form-control"
-											   name="lastname" type="text" disabled required>
-									</div>
+					{{ include('account/info_part.html.twig') }}
+					{{ include('account/document_part.html.twig') }}
+					{{ include('account/event_part.html.twig') }}
+					{{ include('account/news_part.html.twig') }}
+					{{ include('account/video_part.html.twig') }}
 
-								</div>
-								<div class="row">
-									<div class="form-group col-4">
-										<label for="phone">Tél</label>
-										<input id="phone" value="{{ app.user.phone }}" class="form-control"
-											   name="phone" type="tel" disabled>
-									</div>
-
-									<div class="form-group col-4">
-										<label for="place">Localisation</label>
-										<input id="place" value="{{ app.user.place }}" class="form-control"
-											   name="place" type="text" disabled>
-									</div>
-
-									<div class="form-group col-4">
-										<label for="webSite">Site web</label>
-										<input id="webSite" value="{{ app.user.webSite }}" class="form-control"
-											   name="webSite" type="url" disabled>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-
-					<div id="documents-content" class="tab-pane fade" role="tabpanel" aria-labelledby="documents-tab">
-						<div class="d-flex flex-row justify-content-between px-3">
-							<h2 class="d-inline m-0">Mes documents</h2>
-							<a href="{{ path('documenttype_new') }}" class="btn btn-outline-primary"
-							   style="text-transform: none">Nouveau
-								document</a>
-						</div>
-						{% if app.user.documents %}
-							<small class="px-3">Cliquez sur un document pour le modifier</small>
-							<div class="list-group list-group-flush mt-3">
-								{% for document in app.user.documents|sort((a, b) => b.createdAt <=> a.createdAt) %}
-									<div class="d-flex flex-row {% if not(loop.last) %}border-bottom{% endif %}">
-										<a href="{{ path('documenttype_edit', { 'slug' : document.slug }) }}"
-
-										   class="list-group-item list-group-item-action flex-column align-items-start border-0"
-										   style="text-transform: none; font-weight: normal">
-											{% if not(document.isActive) %}
-												<p class="text-warning m-0">Ce document est en attente de validation par
-													un
-													administrateur</p>
-											{% endif %}
-											<div class="d-flex w-100 justify-content-between mb-2">
-												<h3 class="h5">[{{ document.categorydonnees }}
-													] {{ document.title }}</h3>
-												<small>{{ document.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</small>
-											</div>
-											<p>{{ document.getSummary }}</p>
-											<small>Auteur(s) :
-												{% for author in document.author %}
-													{% if loop.index != 1 %}
-														{{ ', ' }}
-													{% endif %}
-													{{ author.getFullName }}
-												{% endfor %}
-											</small>
-										</a>
-										{{ include('documenttype/_delete_form.html.twig') }}
-									</div>
-								{% endfor %}
-							</div>
-						{% else %}
-							<p>Aucun document rédigé</p>
-						{% endif %}
-					</div>
-
-					<div id="events-content" class="tab-pane fade" role="tabpanel" aria-labelledby="events-tab">
-						<div class="d-flex flex-row justify-content-between px-3">
-							<h2 class="d-inline m-0">Mes Évènements</h2>
-							<a href="{{ path('event_new') }}" class="btn btn-outline-primary"
-							   style="text-transform: none">Nouvel
-								évènement</a>
-						</div>
-						{% if app.user.events %}
-							<small class="px-3">Cliquez sur un évènement pour le modifier</small>
-							<div class="list-group list-group-flush mt-3">
-								{% for event in app.user.events|sort((a, b) => b.createdAt <=> a.createdAt) %}
-									<div class="d-flex flex-row {% if not(loop.last) %}border-bottom{% endif %}">
-										<a href="{{ path('event_edit', { 'slug' : event.slug }) }}"
-
-										   class="list-group-item list-group-item-action flex-column align-items-start
-										border-0"
-										   style="text-transform: none; font-weight: normal">
-											{% if not(event.isActive) %}
-												<p class="text-warning m-0">Cet évènement est en attente de validation
-													par
-													un
-													administrateur</p>
-											{% endif %}
-											<div class="d-flex w-100 justify-content-between mb-0">
-												<h3 class="h5 m-0">[{{ event.category }}] {{ event.title }}</h3>
-												<small>{{ event.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</small>
-											</div>
-											<p class="mb-2"><small>Du {{ event.dateBegin|format_datetime(locale='fr',pattern='d MMM Y') }} au {{ event.dateEnd|format_datetime(locale='fr',pattern='d MMM Y') }}</small></p>
-											<p style="font-size: 1rem">{{ event.getSummary }}</p>
-											<small>Auteur(s) :
-												{% for author in event.author %}
-													{% if loop.index != 1 %}
-														{{ ', ' }}
-													{% endif %}
-													{{ author.getFullName }}
-												{% endfor %}
-											</small>
-										</a>
-										{{ include('event/_delete_form.html.twig') }}
-									</div>
-								{% endfor %}
-							</div>
-						{% else %}
-							<p>Aucun évènement renseigné</p>
-						{% endif %}
-					</div>
-
-					<div id="news-content" class="tab-pane fade" role="tabpanel" aria-labelledby="news-tab">
-						<div class="d-flex flex-row justify-content-between px-3">
-							<h2 class="d-inline m-0">Mes Nouvelles</h2>
-							<a href="{{ path('news_new') }}" class="btn btn-outline-primary"
-							   style="text-transform: none">Nouvelle nouvelle</a>
-						</div>
-						{% if app.user.newstypes %}
-							<small class="px-3">Cliquez sur une nouvelle pour la modifier</small>
-							<div class="list-group list-group-flush mt-3">
-								{% for cNews in app.user.newstypes|sort((a, b) => b.createdAt <=> a.createdAt) %}
-									<div class="d-flex flex-row {% if not(loop.last) %}border-bottom{% endif %}">
-										<a href="{{ path('news_edit', { 'slug' : cNews.slug }) }}"
-
-										   class="list-group-item list-group-item-action flex-column align-items-start border-0"
-										   style="text-transform: none; font-weight: normal">
-											{% if not(cNews.isActive) %}
-												<p class="text-warning m-0">Ce document est en attente de validation par
-													un
-													administrateur</p>
-											{% endif %}
-											<div class="d-flex w-100 justify-content-between mb-2">
-												<h3 class="h5">{{ cNews.title }}</h3>
-												<small>{{ cNews.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</small>
-											</div>
-											<p>{{ cNews.getSummary }}</p>
-											<small>Auteur(s) :
-												{% for author in cNews.authors %}
-													{% if loop.index != 1 %}
-														{{ ', ' }}
-													{% endif %}
-													{{ author.getFullName }}
-												{% endfor %}
-											</small>
-										</a>
-										{{ include('news/_delete_form.html.twig') }}
-									</div>
-								{% endfor %}
-							</div>
-						{% else %}
-							<p>Aucune nouvelle publiée</p>
-						{% endif %}
-					</div>
-
-					<div id="videos-content" class="tab-pane fade" role="tabpanel" aria-labelledby="videos-tab">
-						<h2>Mes vidéos</h2>
-					</div>
 				</div>
 			</div>
 		</div>

@@ -1,19 +1,13 @@
 {% extends '@!EasyAdmin/page/content.html.twig' %}
 
-{% block page_title 'SQVALD Dashboard' %}
+{% block page_title 'SQVALD | Dashboard' %}
 
 {% block page_content %}
     <div class="container">
         <div class="row">
             <h2 class="partenaire-title border-bottom" style="padding: 0.5rem 0">Statistiques</h2>
-            <div class="col-3 px-4">
-                <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
-                    <div class="card-text">
-                        <p class="display-3 fw-bold">{{ nbUsers }}</p>
-                        <p class="h1 fw-normal">Utilisateurs</p>
-                    </div>
-                </div>
-            </div>
+        </div>
+        <div class="row justify-content-center">
             <div class="col-3 px-4">
                 <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
                     <div class="card-text">
@@ -25,16 +19,34 @@
             <div class="col-3 px-4">
                 <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
                     <div class="card-text">
-                        <p class="display-3 fw-bold">{{ nbEvents }}</p>
-                        <p class="h1 fw-normal">Évènements</p>
+                        <p class="display-3 fw-bold">{{ nbUsers }}</p>
+                        <p class="h1 fw-normal">Utilisateurs</p>
                     </div>
                 </div>
             </div>
             <div class="col-3 px-4">
                 <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
                     <div class="card-text">
+                        <p class="display-3 fw-bold">{{ nbEvents }}</p>
+                        <p class="h1 fw-normal">Évènements</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+            <div class="col-3 px-4">
+                <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
+                    <div class="card-text">
                         <p class="display-3 fw-bold">{{ nbNews }}</p>
                         <p class="h1 fw-normal">Nouvelles</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 px-4">
+                <div class="card text-center p-4" style="background-color: rgba(0,0,0,.1)">
+                    <div class="card-text">
+                        <p class="display-3 fw-bold">{{ nbVideos }}</p>
+                        <p class="h1 fw-normal">Vidéos</p>
                     </div>
                 </div>
             </div>

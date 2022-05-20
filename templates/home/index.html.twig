@@ -2,83 +2,89 @@
 
 {% block title %}SQVALD | Accueil{% endblock %}
 
+{% block style %}
+	<style>
+		.list-content {
+            font-size: 1.25rem;
+        }
+	</style>
+{% endblock %}
+
 {% block body %}
 	<main>
 		{# Caroussel Data #}
 		<div id="dataCarousel" class="carousel slide carousel-dark mb-0" data-bs-ride="carousel">
 			<div class="carousel-inner border-0">
-				{# News #}
-				{% for cNews in news %}
-					<div class="carousel-item {% if loop.index == 1 %}active{% endif %}"
-						 style="background-color: #4ade80">
-						<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
-							 style="padding: 0.5rem 15%; position:initial;">
-							<div class="col-lg-12 partenaire-txt">
-								<h4 class="partenaire-title">Dernière nouvelle</h4>
-								<p>{{ cNews.title }}</p>
-								<p>{{ cNews.resume }}</p>
-								<p>{{ cNews.createdAt|date('d-m-Y') }}</p>
-								<p>
-									{% for author in cNews.authors %}
-										{% if loop.index != 1 %}
-											{{ ', ' }}
-										{% endif %}
-										{{ author.getFullName }}
-									{% endfor %}
-								</p>
-								{# <p><a class="link" href="{{ path('showNews', {'id' : cNews.id}) }}">Découvrir</a></p> #}
+				{% set data = shuffle(news|merge(events)|merge(documents)) %}
+
+				{% for obj in data %}
+					{% if isDocument(obj) %}
+						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}" style="background-color: palevioletred">
+							<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
+								 style="padding: 0.5rem 15%; position:initial;">
+								<div class="col-lg-12 partenaire-txt">
+									<h4 class="partenaire-title mt-0">Dernier document</h4>
+									<p class="mt-0">{{ obj.title }}</p>
+									<p>{{ obj.createdAt | date("d/m/y") }}</p>
+									<p>{{ obj.resume }}</p>
+									<p>
+										{% for author in obj.author %}
+											{% if loop.index != 1 %}
+												{{ ', ' }}
+											{% endif %}
+											{{ author.getFullName }}
+										{% endfor %}
+									</p>
+									<p><a class="link" href="{{ path('showDocument', {'slug':obj.slug}) }}">Lire</a>
+									</p>
+								</div>
 							</div>
 						</div>
-					</div>
-				{% endfor %}
-				Event
-				{% for event in events %}
-					<div class="carousel-item" style="background-color: skyblue">
-						<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
-							 style="padding: 0.5rem 15%; position:initial;">
-							<div class="col-lg-12 partenaire-txt">
-								<h4 class="partenaire-title">Prochain évènement</h4>
-								<p>{{ event.title }}</p>
-								<p>Du {{ event.dateBegin | date("d/m/y") }} au {{ event.dateEnd | date("d/m/y") }}</p>
-								<p>{{ event.place }}</p>
-								<p>{{ event.resume }}</p>
-								<p>
-									{% for author in event.author %}
-										{% if loop.index != 1 %}
-											{{ ', ' }}
-										{% endif %}
-										{{ author.getFullName }}
-									{% endfor %}
-								</p>
-								<p><a class="link" href="{{ path('showEvent', {'slug' : event.slug}) }}">Découvrir</a>
-								</p>
+					{% elseif isEvent(obj) %}
+						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}" style="background-color: skyblue">
+							<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
+								 style="padding: 0.5rem 15%; position:initial;">
+								<div class="col-lg-12 partenaire-txt">
+									<h4 class="partenaire-title">Prochain évènement</h4>
+									<p>{{ obj.title }}</p>
+									<p>Du {{ obj.dateBegin | date("d/m/y") }} au {{ obj.dateEnd | date("d/m/y") }}</p>
+									<p>{{ obj.place }}</p>
+									<p>{{ obj.resume }}</p>
+									<p>
+										{% for author in obj.author %}
+											{% if loop.index != 1 %}
+												{{ ', ' }}
+											{% endif %}
+											{{ author.getFullName }}
+										{% endfor %}
+									</p>
+									<p><a class="link" href="{{ path('showEvent', {'slug' : obj.slug}) }}">Découvrir</a>
+									</p>
+								</div>
 							</div>
 						</div>
-					</div>
-				{% endfor %}
-				{# Document #}
-				{% for document in documents|slice(0, 1) %}
-					<div class="carousel-item" style="background-color: palevioletred">
-						<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
-							 style="padding: 0.5rem 15%; position:initial;">
-							<div class="col-lg-12 partenaire-txt">
-								<h4 class="partenaire-title mt-0">Dernier document</h4>
-								<p class="mt-0">{{ document.title }}</p>
-								<p>{{ document.createdAt | date("d/m/y") }}</p>
-								<p>{{ document.resume }}</p>
-								<p>
-									{% for author in document.author %}
-										{% if loop.index != 1 %}
-											{{ ', ' }}
-										{% endif %}
-										{{ author.getFullName }}
-									{% endfor %}
-								</p>
-								<p><a class="link" href="{{ path('showDocument', {'slug':document.slug}) }}">Lire</a>
-								</p>
+					{% elseif isNews(obj) %}
+						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}" style="background-color: palegreen">
+							<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
+								 style="padding: 0.5rem 15%; position:initial;">
+								<div class="col-lg-12 partenaire-txt">
+									<h4 class="partenaire-title">Dernière nouvelle</h4>
+									<p>{{ obj.title }}</p>
+									<p>{{ obj.resume }}</p>
+									<p>{{ obj.createdAt|date('d-m-Y') }}</p>
+									<p>
+										{% for author in obj.authors %}
+											{% if loop.index != 1 %}
+												{{ ', ' }}
+											{% endif %}
+											{{ author.getFullName }}
+										{% endfor %}
+									</p>
+									{# <p><a class="link" href="{{ path('showNews', {'id' : cNews.id}) }}">Découvrir</a></p> #}
+								</div>
 							</div>
 						</div>
-					</div>
+					{% endif %}
 				{% endfor %}
 			</div>
 			<button class="carousel-control-prev" type="button" data-bs-target="#dataCarousel" data-bs-slide="prev">
@@ -94,10 +100,51 @@
 
 		{# Le text de la home page #}
 		<div class="container py-4">
-            <div class="row">
-                <h1 class="border-bottom my-3 h2">Le projet SQVALD</h1>
-                <p style="font-size: 1.25rem">La transformation numérique de la société et l’irruption des outils “intelligents” dans la vie quotidienne ont progressivement et activement changé le rapport des patients à la médecine. Ces changements sont marqués par le développement de l’e-santé à travers le déploiement d’outils numériques sur le plan national et régional. La région Centre Val de Loire s’est fortement positionnée dans ce domaine à travers le déploiement de la plateforme e-parcours et ses nombreux services d’accompagnement pour les patients et les soignants. D’un autre côté, les patients et leurs aidants sont de plus en plus entourés d’outils intelligents qui leur sont propres (smartphone, montres connectées, etc.) ou présents dans les structures de soins (appareil de suivi ou de diagnostic, etc.) ou même dans le contexte plus global du déploiement de l’Internet des Objets et villes intelligentes. L’objectif de ce projet est de mettre en place une approche innovante d’accompagnement continu des patients hors mûrs en complémentarité avec la démarche e-santé de l’ARS et en articulation notamment avec la plateforme e-parcours. Il s’agit d’exploiter le contexte technologique pour proposer au patient un suivi régulier et non-intrusif en cohérence avec son parcours de soins, lui permettant ainsi de prendre en main le contrôle de l’évolution de son état de santé et de contribuer à l’amélioration de sa qualité de vie. En coordination avec les professionnels de santé, ce suivi pourra compléter leur vision sur l’évolution du patient entre deux rendez-vous de suivi prévus dans le parcours de soins et renforcer ainsi la coordination dans l’intérêt du patient et de l’amélioration de sa qualité de vie.</p>
-            </div>
+			<div class="row">
+				<h1 class="border-bottom my-3 h2">SQVALD</h1>
+				<h3 class="my-3 text-start">Objectifs du projet</h3>
+				<ul class="list-content">
+					<li class="mb-3">Fournir une vue globale de l'offre de soins de support dont l'APA
+						<ul>
+							<li>Coordination et intégration de l'existant (ROR, sport-santé, e-santé)</li>
+							<li>Ouverture vers les patients et les aidants</li>
+						</ul>
+					</li>
+					<li class="mb-3">Recommander, organiser et assurer le suivi des parcours prescrits
+						<ul>
+							<li>Adhésion du patient</li>
+							<li>Planification et logistique</li>
+							<li>suivi et accompagnement</li>
+						</ul>
+					</li>
+					<li>Observer, adapter, analyser
+						<ul>
+							<li>« Au fur et à mesure »</li>
+							<li>À posteriori</li>
+							<li>Impact sur la qualité de vie</li>
+							<li>Autonomie du patient</li>
+						</ul>
+					</li>
+				</ul>
+{#				<p style="font-size: 1.25rem">La transformation numérique de la société et l’irruption des outils#}
+{#					“intelligents” dans la vie quotidienne ont progressivement et activement changé le rapport des#}
+{#					patients à la médecine. Ces changements sont marqués par le développement de l’e-santé à travers le#}
+{#					déploiement d’outils numériques sur le plan national et régional. La région Centre Val de Loire#}
+{#					s’est fortement positionnée dans ce domaine à travers le déploiement de la plateforme e-parcours et#}
+{#					ses nombreux services d’accompagnement pour les patients et les soignants. D’un autre côté, les#}
+{#					patients et leurs aidants sont de plus en plus entourés d’outils intelligents qui leur sont propres#}
+{#					(smartphone, montres connectées, etc.) ou présents dans les structures de soins (appareil de suivi#}
+{#					ou de diagnostic, etc.) ou même dans le contexte plus global du déploiement de l’Internet des Objets#}
+{#					et villes intelligentes. L’objectif de ce projet est de mettre en place une approche innovante#}
+{#					d’accompagnement continu des patients hors mûrs en complémentarité avec la démarche e-santé de l’ARS#}
+{#					et en articulation notamment avec la plateforme e-parcours. Il s’agit d’exploiter le contexte#}
+{#					technologique pour proposer au patient un suivi régulier et non-intrusif en cohérence avec son#}
+{#					parcours de soins, lui permettant ainsi de prendre en main le contrôle de l’évolution de son état de#}
+{#					santé et de contribuer à l’amélioration de sa qualité de vie. En coordination avec les#}
+{#					professionnels de santé, ce suivi pourra compléter leur vision sur l’évolution du patient entre deux#}
+{#					rendez-vous de suivi prévus dans le parcours de soins et renforcer ainsi la coordination dans#}
+{#					l’intérêt du patient et de l’amélioration de sa qualité de vie.</p>#}
+			</div>
 		</div>
 
 		{# Caroussel Partenaires #}

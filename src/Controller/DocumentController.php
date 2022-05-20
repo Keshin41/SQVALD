@@ -121,7 +121,7 @@ class DocumentController extends AbstractController
 		}
 
 		return $this->render('documenttype/edit.html.twig', [
-			'documenttype' => $document,
+			'document' => $document,
 			'form' => $form->createView(),
 		]);
 	}
