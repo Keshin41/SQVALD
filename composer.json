@@ -103,6 +103,8 @@
             "@auto-scripts"
         ],
         "compile": [
+            "php bin/console doctrine:migration:version 'DoctrineMigrations\\Version20220509071807' --add",
+            "php bin/console doctrine:migration:version 'DoctrineMigrations\\Version20220506093652' --add",
             "php bin/console doctrine:migrations:migrate"
         ]
     },
