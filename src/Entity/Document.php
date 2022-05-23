@@ -315,6 +315,6 @@ class Document
 		if ($this->resume != null && $this->resume != '') {
 			return $this->resume;
 		}
-		return substr(strip_tags($this->content), 0, 254).'…';
+		return htmlspecialchars_decode(substr(strip_tags($this->content), 0, 254).'…', ENT_QUOTES);
 	}
 }

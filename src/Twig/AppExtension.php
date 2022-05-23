@@ -5,6 +5,8 @@ namespace App\Twig;
 use App\Entity\Document;
 use App\Entity\Event;
 use App\Entity\News;
+use App\Entity\User;
+use App\Entity\Video;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
@@ -29,6 +31,8 @@ class AppExtension extends AbstractExtension
 			new TwigFunction('isDocument', [$this, 'isDocument']),
 			new TwigFunction('isEvent', [$this, 'isEvent']),
 			new TwigFunction('isNews', [$this, 'isNews']),
+			new TwigFunction('isVideo', [$this, 'isVideo']),
+			new TwigFunction('isUser', [$this, 'isUser']),
         ];
     }
 
@@ -58,5 +62,15 @@ class AppExtension extends AbstractExtension
 	public function isNews($var): bool
 	{
 		return $var instanceof News;
+	}
+
+	public function isVideo($var): bool
+	{
+		return $var instanceof Video;
+	}
+
+	public function isUser($var): bool
+	{
+		return $var instanceof User;
 	}
 }

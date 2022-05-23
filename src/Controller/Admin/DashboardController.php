@@ -54,17 +54,51 @@ class DashboardController extends AbstractDashboardController
 	 */
 	public function index(): Response
 	{
+
+		$users = $this->userRepository->findBy(['isVerified' => true, 'isValide' => false], ['createdAt' => 'DESC']);
+		$documents = $this->documentRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']);
+		$events = $this->eventRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']);
+		$news = $this->newsRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']);
+		$videos = $this->videoRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']);
+
+		$data = array();
+		if (!empty($users)) $data[] = $users;
+		if (!empty($documents)) $data[] = $documents;
+		if (!empty($events)) $data[] = $events;
+		if (!empty($news)) $data[] = $news;
+		if (!empty($videos)) $data[] = $videos;
+
+		$lengths = array_map('count', $data);
+		asort($lengths);
+		$sortedData = array();
+		foreach (array_keys($lengths) as $k) $sortedData[$k] = $data[$k];
+		$sortedData = array_reverse($sortedData);
+
+		$left = array();
+		$right = array();
+		$length = count($sortedData) - 1;
+
+		for ($i = 0; $i <= $length; $i++) {
+			$leftLength = 0;
+			$rightLength = 0;
+			foreach ($left as $object) $leftLength += count($object);
+			foreach ($right as $object) $rightLength += count($object);
+			if ($leftLength <= $rightLength) $left[] = $sortedData[$i];
+			else $right[] = $sortedData[$i];
+		}
+
+		$splitedData = array($left, $right);
+
+
+		//TODO 2022-05-20 : Modifier le twig pour afficher les entités en validations par taille
+
 		return $this->render("admin/dashboard.html.twig", [
-			'documents' => $this->documentRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']),
 			'nbDocuments' => $this->documentRepository->count([]),
-			'users' => $this->userRepository->findBy(['isVerified' => true, 'isValide' => false], ['createdAt' => 'DESC']),
 			'nbUsers' => $this->userRepository->count([]),
-			'events' => $this->eventRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']),
 			'nbEvents' => $this->eventRepository->count([]),
-			'news' => $this->newsRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']),
 			'nbNews' => $this->newsRepository->count([]),
-			'videos' => $this->videoRepository->findBy(['isActive' => false], ['createdAt' => 'DESC']),
-			'nbVideos' => $this->videoRepository->count([])
+			'nbVideos' => $this->videoRepository->count([]),
+			'data' => $splitedData
 		]);
 	}
 
