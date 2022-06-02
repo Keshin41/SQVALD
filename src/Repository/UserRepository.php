@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Classe\SearchMembre;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -38,10 +40,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
 	public function findAdmins() {
-		return $this->createQueryBuilder('u')
-			->andWhere('u.roles LIKE :role')
-			->setParameter('role', '%ROLE_ADMIN%')
-			->getQuery()
+		$rsm = new ResultSetMappingBuilder($this->_em);
+		$rsm->addRootEntityFromClassMetadata(User::class, 'u');
+
+		return $this->_em->createNativeQuery('select * from member u where roles::text LIKE \'%"ROLE_ADMIN"%\'', $rsm)
 			->getResult();
 	}
 

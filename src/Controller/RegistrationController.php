@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Classe\Mail;
 use App\Classe\SearchMembre;
+use App\Entity\Partner;
 use App\Entity\User;
 use App\Form\CalendarType;
 use App\Form\RegistrationFormType;
@@ -124,7 +125,6 @@ class RegistrationController extends AbstractController
 
 		$user->setIsVerified(true);
 		$this->entityManager->flush();
-
 
 		$adminUsers = $userRepository->findAdmins();
 

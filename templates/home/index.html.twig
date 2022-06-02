@@ -4,9 +4,17 @@
 
 {% block style %}
 	<style>
-		.list-content {
+        .list-content {
             font-size: 1.25rem;
         }
+
+        #dataCarousel .carousel-item {
+            height: initial;
+        }
+
+        #dataCarousel .carousel-control-prev:hover, #dataCarousel .carousel-control-next:hover, #dataCarousel a:hover {
+			background-color: rgba(0,0,0,0.02);
+		}
 	</style>
 {% endblock %}
 
@@ -15,73 +23,43 @@
 		{# Caroussel Data #}
 		<div id="dataCarousel" class="carousel slide carousel-dark mb-0" data-bs-ride="carousel">
 			<div class="carousel-inner border-0">
-				{% set data = shuffle(news|merge(events)|merge(documents)) %}
+				{% set data = shuffle(news|merge(events)|merge(documents)|merge(videos)) %}
 
 				{% for obj in data %}
 					{% if isDocument(obj) %}
-						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}" style="background-color: palevioletred">
+						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}"
+							 style="background-color: rgba(255,255,0, .1)">
 							<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
-								 style="padding: 0.5rem 15%; position:initial;">
-								<div class="col-lg-12 partenaire-txt">
-									<h4 class="partenaire-title mt-0">Dernier document</h4>
-									<p class="mt-0">{{ obj.title }}</p>
-									<p>{{ obj.createdAt | date("d/m/y") }}</p>
-									<p>{{ obj.resume }}</p>
-									<p>
-										{% for author in obj.author %}
-											{% if loop.index != 1 %}
-												{{ ', ' }}
-											{% endif %}
-											{{ author.getFullName }}
-										{% endfor %}
-									</p>
-									<p><a class="link" href="{{ path('showDocument', {'slug':obj.slug}) }}">Lire</a>
-									</p>
-								</div>
+								 style="padding: 0 15%; position:initial;">
+								<a href="{{ path('showDocument', {'slug' : obj.slug}) }}" class="py-3 fw-normal w-100"
+								   style="text-transform: none; text-decoration: none; color: unset; font-size: 1.25rem">[Document] {{ obj.title }}</a>
 							</div>
 						</div>
 					{% elseif isEvent(obj) %}
-						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}" style="background-color: skyblue">
+						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}"
+							 style="background-color: rgba(0,0,255, .1)">
 							<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
-								 style="padding: 0.5rem 15%; position:initial;">
-								<div class="col-lg-12 partenaire-txt">
-									<h4 class="partenaire-title">Prochain évènement</h4>
-									<p>{{ obj.title }}</p>
-									<p>Du {{ obj.dateBegin | date("d/m/y") }} au {{ obj.dateEnd | date("d/m/y") }}</p>
-									<p>{{ obj.place }}</p>
-									<p>{{ obj.resume }}</p>
-									<p>
-										{% for author in obj.author %}
-											{% if loop.index != 1 %}
-												{{ ', ' }}
-											{% endif %}
-											{{ author.getFullName }}
-										{% endfor %}
-									</p>
-									<p><a class="link" href="{{ path('showEvent', {'slug' : obj.slug}) }}">Découvrir</a>
-									</p>
-								</div>
+								 style="padding: 0 15%; position:initial;">
+								<a href="{{ path('showEvent', {'slug' : obj.slug}) }}" class="py-3 fw-normal w-100"
+								   style="text-transform: none; text-decoration: none; color: unset; font-size: 1.25rem">[Évènement] {{ obj.title }}</a>
 							</div>
 						</div>
 					{% elseif isNews(obj) %}
-						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}" style="background-color: palegreen">
+						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}"
+							 style="background-color: rgba(0,255,0, .1)">
 							<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
-								 style="padding: 0.5rem 15%; position:initial;">
-								<div class="col-lg-12 partenaire-txt">
-									<h4 class="partenaire-title">Dernière nouvelle</h4>
-									<p>{{ obj.title }}</p>
-									<p>{{ obj.resume }}</p>
-									<p>{{ obj.createdAt|date('d-m-Y') }}</p>
-									<p>
-										{% for author in obj.authors %}
-											{% if loop.index != 1 %}
-												{{ ', ' }}
-											{% endif %}
-											{{ author.getFullName }}
-										{% endfor %}
-									</p>
-									{# <p><a class="link" href="{{ path('showNews', {'id' : cNews.id}) }}">Découvrir</a></p> #}
-								</div>
+								 style="padding: 0 15%; position:initial;">
+								<a href="{{ path('news_show', {'slug' : obj.slug}) }}" class="py-3 fw-normal w-100"
+								   style="text-transform: none; text-decoration: none; color: unset; font-size: 1.25rem">[Nouvelle] {{ obj.title }}</a>
+							</div>
+						</div>
+					{% elseif isVideo(obj) %}
+						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}"
+							 style="background-color: rgba(255,0,255, .1)">
+							<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0"
+								 style="padding: 0 15%; position:initial;">
+								<a href="{{ path('video_show', {'slug' : obj.slug}) }}" class="py-3 fw-normal w-100"
+								   style="text-transform: none; text-decoration: none; color: unset; font-size: 1.25rem">[Vidéo] {{ obj.title }}</a>
 							</div>
 						</div>
 					{% endif %}
@@ -96,7 +74,7 @@
 				<span class="visually-hidden">Next</span>
 			</button>
 		</div>
-		<hr class="featurette-divider my-0">
+		{# <hr class="featurette-divider my-0"> #}
 
 		{# Le text de la home page #}
 		<div class="container py-4">
@@ -126,24 +104,6 @@
 						</ul>
 					</li>
 				</ul>
-{#				<p style="font-size: 1.25rem">La transformation numérique de la société et l’irruption des outils#}
-{#					“intelligents” dans la vie quotidienne ont progressivement et activement changé le rapport des#}
-{#					patients à la médecine. Ces changements sont marqués par le développement de l’e-santé à travers le#}
-{#					déploiement d’outils numériques sur le plan national et régional. La région Centre Val de Loire#}
-{#					s’est fortement positionnée dans ce domaine à travers le déploiement de la plateforme e-parcours et#}
-{#					ses nombreux services d’accompagnement pour les patients et les soignants. D’un autre côté, les#}
-{#					patients et leurs aidants sont de plus en plus entourés d’outils intelligents qui leur sont propres#}
-{#					(smartphone, montres connectées, etc.) ou présents dans les structures de soins (appareil de suivi#}
-{#					ou de diagnostic, etc.) ou même dans le contexte plus global du déploiement de l’Internet des Objets#}
-{#					et villes intelligentes. L’objectif de ce projet est de mettre en place une approche innovante#}
-{#					d’accompagnement continu des patients hors mûrs en complémentarité avec la démarche e-santé de l’ARS#}
-{#					et en articulation notamment avec la plateforme e-parcours. Il s’agit d’exploiter le contexte#}
-{#					technologique pour proposer au patient un suivi régulier et non-intrusif en cohérence avec son#}
-{#					parcours de soins, lui permettant ainsi de prendre en main le contrôle de l’évolution de son état de#}
-{#					santé et de contribuer à l’amélioration de sa qualité de vie. En coordination avec les#}
-{#					professionnels de santé, ce suivi pourra compléter leur vision sur l’évolution du patient entre deux#}
-{#					rendez-vous de suivi prévus dans le parcours de soins et renforcer ainsi la coordination dans#}
-{#					l’intérêt du patient et de l’amélioration de sa qualité de vie.</p>#}
 			</div>
 		</div>
 

@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Partners;
+use App\Entity\Partner;
 use App\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -90,6 +90,12 @@ class RegistrationFormType extends AbstractType
 				],
 				'required' => false
             ])
+
+			->add('partner', EntityType::class, [
+				'class' => Partner::class,
+				'label' => 'Partenaire',
+				'choice_label' => 'content'
+			])
 
         ;
     }

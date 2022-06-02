@@ -9,6 +9,8 @@ use App\Entity\Document;
 use App\Entity\Event;
 use App\Entity\Partner;
 use App\Entity\News;
+use App\Entity\User;
+use App\Entity\Video;
 use App\Repository\CategoryDonneesRepository;
 
 use App\Repository\CategoryNewsRepository;
@@ -24,22 +26,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class HomeController extends AbstractController
 {
 
-	private $repoDocumentType;
-	private $repoCategoryDoc;
-	private $repoCategoryNews;
-	private $repoNewsType;
 	private $entityManager;
 
 
-	public function __construct(DocumentRepository        $repoDocumentType,
-								CategoryDonneesRepository $repoCategoryDoc,
-								CategoryNewsRepository    $repoCategoryNews,
-								NewsRepository            $repoNewsType, EntityManagerInterface $entityManager)
+	public function __construct(EntityManagerInterface $entityManager)
 	{
-		$this->repoDocumentType = $repoDocumentType;
-		$this->repoCategoryDoc = $repoCategoryDoc;
-		$this->repoCategoryNews = $repoCategoryNews;
-		$this->repoNewsType = $repoNewsType;
 		$this->entityManager = $entityManager;
 
 	}
@@ -54,7 +45,9 @@ class HomeController extends AbstractController
 
 		$news = $this->entityManager->getRepository(News::class)->findBy(['isActive' => true], ['createdAt' => 'DESC'], 3);
 
-		$events = $this->entityManager->getRepository(Event::class)->findSinceDate(date_create(), 2);
+		$events = $this->entityManager->getRepository(Event::class)->findSinceDate(date_create(), 1);
+
+		$videos = $this->entityManager->getRepository(Video::class)->findBy(['isActive' => true], ['createdAt' => 'DESC'], 1);
 
 		$partners = $this->entityManager->getRepository(Partner::class)->findAll();
 
@@ -62,6 +55,7 @@ class HomeController extends AbstractController
 			'documents' => $documents,
 			'news' => $news,
 			'events' => $events,
+			'videos' => $videos,
 			'partners' => $partners
 		]);
 	}
