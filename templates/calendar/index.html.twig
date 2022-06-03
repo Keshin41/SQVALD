@@ -18,16 +18,18 @@
 
 {% block body %}
 	<main class="container">
-		<div class="row mt-3">
+		<div class="d-flex justify-content-between align-items-center">
+			<h1 class="my-3">Calendrier</h1>
+			<a class="text-muted mx-4 text-decoration-none" id="toSearch"
+			   href="{{ path('events_index') }}">Recherche avancée</a>
+		</div>
+		<div class="row">
 			{{ form_start(form) }}
 			<div class="d-inline" style="margin-top: 10px">
 				{{ form_label(form.year) }}
 				<div class="w-auto d-inline-block align-middle">
 					{{ form_widget(form.year) }}
 				</div>
-			</div>
-			<div class="d-inline">
-				<a class="text-muted mx-4 text-decoration-none" id="toSearch" href="{{ path('events_index') }}">Recherche avancée</a>
 			</div>
 			{{ form_rest(form) }}
 			{{ form_end(form) }}

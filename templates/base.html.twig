@@ -14,7 +14,8 @@
     <link href="{{ asset('assets/css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/styles/membre.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/styles/styleForm.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/css/styles/styleDescrip.css') }}" rel="stylesheet">
+	<link href="{{ asset('assets/css/styles/styleDescrip.css') }}" rel="stylesheet">
+	<link href="{{ asset('assets/css/styles/global.css') }}" rel="stylesheet">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,6 +36,8 @@
 
 
     <style>
+
+
         .bd-placeholder-img {
             font-size: 1.125rem;
             text-anchor: middle;
@@ -68,11 +71,11 @@
     </style>
 
 </head>
-<body>
+<body class="bgrd-accent-light">
 <header>
-    <nav class="navbar navbar-expand-md navbar-light fixed-top bg-light" style="padding-left: 12px; padding-right: 12px">
+    <nav class="navbar navbar-expand-md navbar-light fixed-top bgrd-secondary-light" style="padding-left: 12px; padding-right: 12px">
 
-        <a class="navbar-brand" href="/">SQVALD</a>
+        <a class="navbar-brand color-primary-light" href="/">SQV<span class="color-accent-light">ALD</span></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03"
                 aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -81,46 +84,46 @@
         <div class="collapse navbar-collapse" id="navbarColor03">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('home') }}">Accueil
+                    <a class="nav-link color-primary-light" href="{{ path('home') }}">Accueil
                         <span class="visually-hidden">(current)</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('a_propos') }}">A propos</a>
+                    <a class="nav-link color-primary-light" href="{{ path('a_propos') }}">A propos</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('documents_index') }}">Documents</a>
+                    <a class="nav-link color-primary-light" href="{{ path('documents_index') }}">Documents</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('news_index') }}">News</a>
+                    <a class="nav-link color-primary-light" href="{{ path('news_index') }}">News</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('calendar') }}">Calendrier</a>
+                    <a class="nav-link color-primary-light" href="{{ path('calendar') }}">Calendrier</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('videos_index') }}">Vidéos</a>
+                    <a class="nav-link color-primary-light" href="{{ path('videos_index') }}">Vidéos</a>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                <li class="nav-item dropdown color-primary-light">
+                    <a class="nav-link dropdown-toggle color-primary-light" data-bs-toggle="dropdown" href="#" role="button"
                        aria-haspopup="true" aria-expanded="false">Consortium</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ path('partners_index') }}">Partenaires</a>
+                        <a class="dropdown-item color-primary-light" href="{{ path('partners_index') }}">Partenaires</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ path('show_membre') }}">Membres</a>
+                        <a class="dropdown-item color-primary-light" href="{{ path('show_membre') }}">Membres</a>
                     </div>
                 </li>
             </ul>
         </div>
         <div class="navbar-item-custom">
             {% if app.user %}
-                <a href="{{ path('account') }}" class="nav-link d-inline" style="border-right: solid grey 1px">Mon espace</a><a href="{{ path('app_logout') }}" class="nav-link d-inline" style="border-left: solid grey 1px">Déconnexion</a>
+                <a href="{{ path('account') }}" class="nav-link d-inline color-primary-light brd-primary-light" style="border-right: solid 1px">Mon espace</a><a href="{{ path('app_logout') }}" class="nav-link d-inline color-primary-light brd-primary-light" style="border-left: solid 1px">Déconnexion</a>
             {% else %}
-                <a href="{{ path('app_login') }}" class="nav-link d-inline" style="border-right: solid grey 1px">Connexion</a><a href="{{ path('app_register') }}" class="nav-link d-inline" style="border-left: solid grey 1px">S'inscrire</a>
+                <a href="{{ path('app_login') }}" class="nav-link d-inline color-primary-light brd-primary-light" style="border-right: solid 1px">Connexion</a><a href="{{ path('app_register') }}" class="nav-link d-inline color-primary-light brd-primary-light" style="border-left: solid 1px">S'inscrire</a>
             {% endif %}
         </div>
     </nav>

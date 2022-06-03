@@ -6,8 +6,10 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authenticator\AbstractLoginFormAuthenticator;
@@ -25,11 +27,13 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
 	private $userRepository;
 	private $router;
+	private $flashBag;
 
-    public function __construct(UserRepository $userRepository, RouterInterface $router)
+    public function __construct(UserRepository $userRepository, RouterInterface $router, FlashBagInterface $flashBag)
     {
 		$this->userRepository = $userRepository;
 		$this->router = $router;
+		$this->flashBag = $flashBag;
     }
 
     public function authenticate(Request $request): PassportInterface
@@ -63,7 +67,13 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 		return new RedirectResponse($this->router->generate('home'));
     }
 
-    protected function getLoginUrl(Request $request): string
+	public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
+	{
+		$this->flashBag->add('error', 'Email ou mot de passe incorrect');
+		return new RedirectResponse($this->router->generate('app_login'));
+	}
+
+	protected function getLoginUrl(Request $request): string
     {
 		return $this->router->generate('app_login');
     }

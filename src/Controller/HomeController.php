@@ -43,7 +43,7 @@ class HomeController extends AbstractController
 
 		$documents = $this->entityManager->getRepository(Document::class)->findBy(['isActive' => true], ['createdAt' => 'DESC'], 2);
 
-		$news = $this->entityManager->getRepository(News::class)->findBy(['isActive' => true], ['createdAt' => 'DESC'], 3);
+		$news = $this->entityManager->getRepository(News::class)->findBy(['isActive' => true], ['createdAt' => 'DESC'], 2);
 
 		$events = $this->entityManager->getRepository(Event::class)->findSinceDate(date_create(), 1);
 

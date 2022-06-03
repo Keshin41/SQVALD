@@ -79,7 +79,7 @@
 		{# Le text de la home page #}
 		<div class="container py-4">
 			<div class="row">
-				<h1 class="border-bottom my-3 h2">SQVALD</h1>
+				<h1 class="border-bottom my-3 h2 color-primary brd-primary fw-bold">SQVALD</h1>
 				<h3 class="my-3 text-start">Objectifs du projet</h3>
 				<ul class="list-content">
 					<li class="mb-3">Fournir une vue globale de l'offre de soins de support dont l'APA
@@ -108,38 +108,36 @@
 		</div>
 
 		{# Caroussel Partenaires #}
-		<h4 class="partenaire-title border-bottom" style="padding: 0 0 0.5rem 2rem">Nos partenaires</h4>
-		<div id="partnerCarousel" class="carousel slide carousel-dark mb-0" data-bs-ride="carousel">
-			<div class="carousel-inner border-0">
-				{% for partner in partners %}
-					<div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
-						<svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-							 aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">
-							<rect width="100%" height="100%" fill="#FFF"/>
-						</svg>
-						<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0 row">
-							<div class="col-lg-5">
-								<div class="partenaire-img">
-									<img class="img-resize" src="{{ vich_uploader_asset(partner, 'illustrationFile') }}"
-										 alt="{{ partner.content }}">
+		<div class="bgrd-secondary-light py-3">
+			<h4 class="partenaire-title m-0" style="padding: 0 0 0 2rem">Nos partenaires</h4>
+			<div id="partnerCarousel" class="carousel slide carousel-dark mb-0" data-bs-ride="carousel">
+				<div class="carousel-inner border-0">
+					{% for partner in partners %}
+						<div class="carousel-item {% if loop.index == 1 %}active{% endif %}">
+							<div class="carousel-caption text-start carousel-responsive justify-content-center mb-0 row">
+								<div class="col-lg-5">
+									<div class="partenaire-img">
+										<img class="img-resize" src="{{ vich_uploader_asset(partner, 'illustrationFile') }}"
+											 alt="{{ partner.content }}">
+									</div>
+								</div>
+								<div class="col-lg-7 partenaire-txt color-accent-light">
+									<p>{{ partner.content }}</p>
+									<p><a class="link color-primary" href="{{ partner.btnUrl }}">Découvrir</a></p>
 								</div>
 							</div>
-							<div class="col-lg-7 partenaire-txt">
-								<p>{{ partner.content }}</p>
-								<p><a class="link" href="{{ partner.btnUrl }}">Découvrir</a></p>
-							</div>
 						</div>
-					</div>
-				{% endfor %}
+					{% endfor %}
+				</div>
+				<button class="carousel-control-prev" type="button" data-bs-target="#partnerCarousel" data-bs-slide="prev">
+					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Previous</span>
+				</button>
+				<button class="carousel-control-next" type="button" data-bs-target="#partnerCarousel" data-bs-slide="next">
+					<span class="carousel-control-next-icon" aria-hidden="true"></span>
+					<span class="visually-hidden">Next</span>
+				</button>
 			</div>
-			<button class="carousel-control-prev" type="button" data-bs-target="#partnerCarousel" data-bs-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Previous</span>
-			</button>
-			<button class="carousel-control-next" type="button" data-bs-target="#partnerCarousel" data-bs-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="visually-hidden">Next</span>
-			</button>
 		</div>
 	</main>
 
