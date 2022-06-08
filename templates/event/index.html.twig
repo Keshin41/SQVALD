@@ -41,6 +41,15 @@
         hr.featurette-divider {
             height: .5px;
         }
+
+		.border-flush {
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
+		}
+
+		#search_event_date::-webkit-calendar-picker-indicator {
+			filter: invert(1);
+		}
 	</style>
 {% endblock %}
 
@@ -81,7 +90,7 @@
 									<div class="col-6">{{ form_row(form.place) }}</div>
 								</div>
 								{{ form_label(form.categories) }}
-								<div class="row my-2 border-top border-bottom py-2">
+								<div class="border-flush row my-2 py-2">
 									{% for i in 0..form.categories|length-1 %}
 										<div class="col-3">
 											{{ form_widget(form.categories[i]) }}
@@ -97,6 +106,9 @@
 									<div class="col-8">
 										{{ form_widget(form.date) }}
 									</div>
+								</div>
+								<div class="pb-3">
+									{{ form_widget(form.submit) }}
 								</div>
 								{{ form_rest(form) }}
 								{{ form_end(form) }}

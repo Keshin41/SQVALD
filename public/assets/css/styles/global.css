@@ -14,10 +14,60 @@
 .bgrd-secondary-light {background-color: rgb(47,62,71);}
 .brd-secondary-light {border-color: rgb(47,62,71);}
 
-.color-accent {color: rgb(151,156,154);}
+.color-accent {color: rgb(151,156,154) !important;}
 .bgrd-accent {background-color: rgb(151,156,154);}
 .brd-accent {border-color: rgb(151,156,154);}
 
 .color-accent-light {color: rgb(250,250,250);}
 .bgrd-accent-light {background-color: rgb(250,250,250);}
 .brd-accent-light {border-color: rgb(250,250,250);}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.card-custom .card-header {
+    background-color: transparent;
+    border: none;
+}
+
+.card-custom .card-header .card-name {
+    border-bottom: 1px solid rgb(9, 116, 110);
+    border-right: 1px solid rgb(9, 116, 110);
+    border-bottom-right-radius: 0.25rem;
+    border-top-left-radius: 0.25rem;
+}
+
+.card-custom i {
+    color: rgb(9,116,110);
+}
+
+.link-card:hover .card-custom {
+    background-color: rgb(230,230,230);
+}
+
+.link-card:hover .card-name {
+    background-color: rgb(47,62,71);
+}
+
+.accordion {
+    background-color: rgb(230,230,230);
+}
+
+.accordion-item, .accordion-button {
+    background-color: transparent;
+}
+
+.form-control, .form-control:focus, .form-select {
+    background-color: rgb(9,116,110);
+    color: white;
+}
+
+.form-control::placeholder {
+    color: rgb(250,250,250);
+}
+
+input[type="checkbox"]:checked, input[type="radio"]:checked {
+    background-color: rgb(9,116,110);
+    border-color: rgb(9,116,110);
+}

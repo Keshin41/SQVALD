@@ -9,13 +9,13 @@
 			color: red;
 		}
 
-		.form-control, .form-control:focus, .form-select {
-			background-color: rgb(9,116,110);
-			color: white;
-		}
-
 		.form-control::placeholder {
 			color: #999;
+		}
+
+		button:hover {
+			background-color: rgb(9,116,110);
+			color: white !important;
 		}
 	</style>
 {% endblock %}
@@ -63,7 +63,7 @@
 
 			<div class="row justify-content-center">
 				<div class="col-3 text-center">
-					<button type="submit" class="btn btn-info btn-lg w-100" name="register">S'inscrire</button>
+					<button type="submit" class="btn btn-lg w-100 bgrd-primary-light color-accent-light" name="register">S'inscrire</button>
 				</div>
 			</div>
 			{{ form_rest(registrationForm) }}

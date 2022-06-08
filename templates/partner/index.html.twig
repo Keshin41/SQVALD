@@ -14,6 +14,15 @@
 		.row {
 			margin-top: 1.5rem;
 		}
+
+		.showMember:hover {
+			background-color: rgba(255,255,255,0.8);
+		}
+
+		.showPart:hover {
+			background-color: rgb(9,116,110);
+			border-color: rgb(9,116,110);
+		}
 	</style>
 {% endblock %}
 
@@ -25,18 +34,18 @@
 				<div class="row">
 			{% endif %}
 			<div class="col-4">
-				<div class="card h-100">
+				<div class="card h-100 brd-secondary-light">
 					<div>
 						<img class="card-img-top img-fluid"
 							 src="{{ vich_uploader_asset(partner, 'illustrationFile') }}"
 							 alt="{{ partner.content }}">
 					</div>
-					<div class="card-body">
+					<div class="card-body bgrd-secondary-light color-accent-light">
 						<div class="d-flex h-100 flex-column justify-content-between">
 							<p>{{ partner.content }}</p>
 							<div>
-								<a class="btn btn-primary" href="{{ partner.btnUrl }}">Découvrir</a>
-								<a href="{{ path('show_membre', {'partner' : partner.id}) }}" class="btn btn-secondary float-end">Membres associés</a>
+								<a class="showPart btn btn-primary bgrd-primary-light brd-primary-light" href="{{ partner.btnUrl }}">Découvrir</a>
+								<a href="{{ path('show_membre', {'partner' : partner.id}) }}" class="showMember btn float-end bgrd-accent-light text-black">Membres associés</a>
 							</div>
 						</div>
 					</div>
