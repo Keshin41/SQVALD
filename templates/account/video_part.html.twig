@@ -1,7 +1,7 @@
 <div id="videos-content" class="tab-pane fade" role="tabpanel" aria-labelledby="videos-tab">
 	<div class="d-flex flex-row justify-content-between px-3">
 		<h2 class="d-inline m-0">Mes Vidéos</h2>
-		<a href="{{ path('video_new') }}" class="btn btn-outline-primary"
+		<a href="{{ path('video_new') }}" class="btn searchBtn"
 		   style="text-transform: none">Nouvelle vidéo</a>
 	</div>
 	{% if app.user.videos %}
@@ -11,7 +11,7 @@
 				<div class="d-flex flex-row {% if not(loop.last) %}border-bottom{% endif %}">
 					<a href="{{ path('video_edit', { 'slug' : video.slug }) }}"
 
-					   class="list-group-item list-group-item-action flex-column align-items-start border-0"
+					   class="list-group-item list-group-item-action flex-column align-items-start border-0 bgrd-accent-light"
 					   style="text-transform: none; font-weight: normal">
 						{% if not(video.isActive) %}
 							<p class="text-warning m-0">Cette vidéo est en attente de validation par

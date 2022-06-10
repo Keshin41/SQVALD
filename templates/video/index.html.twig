@@ -77,6 +77,9 @@
 											{{ form_row(form.toDate) }}
 										</div>
 									</div>
+									<div class="pb-3">
+										{{ form_widget(form.submit, {'attr' : {'class' : 'searchBtn'}}) }}
+									</div>
 									{{ form_rest(form) }}
 									{{ form_end(form) }}
 								</div>
@@ -89,30 +92,18 @@
 		<hr class="featurette-divider mt-0 mb-0">
 		<div class="container">
 			{% for video in videos %}
-				<a href="{{ path('video_show', {'slug':video.slug}) }}"
+				<a href="{{ path('video_show', {'slug':video.slug}) }}" class="link-card"
 				   style="color: black; text-decoration: none; padding: 0; text-transform: none">
-					<div class="member-entry fw-normal p-1">
-						<div class="row member-details w-100 m-0">
-							<div class="d-flex h-100 flex-column justify-content-between">
-								<div class="d-flex w-100 justify-content-between mb-2">
-									<h3 class="h4">[{{ video.getType }}] {{ video.title }}</h3>
-									<p class="m-0">{{ video.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</p>
-								</div>
-								<p class="m-0">Auteur(s) :
-									{% for author in video.authors %}
-										{% if loop.index != 1 %}
-											{{ ', ' }}
-										{% endif %}
-										{{ author.getFullName }}
-									{% endfor %}
-								</p>
-							</div>
+					<div class="card card-custom brd-primary mt-3">
+						<div class="card-header p-0 d-flex justify-content-between align-items-center">
+							<p class="rounded-0 card-name h4 mb-0 p-2 d-inline-block bgrd-primary-light color-accent-light"> {{ video.title }} </p>
+							<p class="m-0 px-3">{{ video.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</p>
 						</div>
 					</div>
 				</a>
 			{% endfor %}
 		</div>
-		<div class="d-flex justify-content-center">
+		<div class="d-flex justify-content-center mt-3">
 			{% do videos.setPageRange(5) %}
 			{{ knp_pagination_render(videos, 'pagination/pagination.html.twig') }}
 		</div>

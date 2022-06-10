@@ -113,22 +113,23 @@ class NewsRepository extends ServiceEntityRepository
 				->andWhere('n.title LIKE :keyword')
 				->setParameter('keyword', '%'.$keyword.'%');
 		}
-		if (!empty($form) && !empty($to)) {
+		if (!empty($from) && !empty($to)) {
 			$builder
-				->andWhere('n.createdAt BETWEEN :from AND :to OR n.updateAt BETWEEN :from AND :to')
+				->andWhere('n.createdAt BETWEEN :from AND :to')
 				->setParameter('from', $from)
 				->setParameter('to', $to);
 		}
-		elseif (!empty($form)) {
+		elseif (!empty($from)) {
 			$builder
-				->andWhere('n.createdAt >= :from OR n.updateAt >= :from')
+				->andWhere('n.createdAt >= :from')
 				->setParameter('from', $from);
 		}
 		elseif (!empty($to)) {
 			$builder
-				->andWhere('n.createdAt <= :to OR n.updateAt <= :to')
+				->andWhere('n.createdAt <= :to')
 				->setParameter('to', $to);
 		}
+//		dd($from, $to, empty($form) && empty($to), empty($form), empty($to), isset($from), isset($to));
 		return $builder->getQuery()->getResult();
 	}
 

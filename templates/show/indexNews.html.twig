@@ -1,29 +1,26 @@
 {% extends "base.html.twig" %}
 {% block body %}
-<div class="container-style">
-    <!--<h1 class="title p-1">{{ news.title }}</h1>-->
-
-    <div class="img-fluid-style">
-        <img src="/uploads/{{ news.picture }}" alt="{{ news.title }}"/>
+    <div class="container pt-3">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-row align-items-center justify-content-between">
+                    <h1>{{ news.title }}</h1>
+                    <p class="m-0">Ajouté le {{ news.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</p>
+                </div>
+                <p class="m-0">Auteur(s) :
+                    {% for author in news.authors %}
+                        {% if loop.index != 1 %}
+                            {{ ', ' }}
+                        {% endif %}
+                        {{ author.getFullName }}
+                    {% endfor %}
+                </p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 py-4">
+                {{ news.content|raw }}
+            </div>
+        </div>
     </div>
-
-   <div class="content-style">
-       <h2 class="title">{{ news.title }}</h2>
-       <p class="resume">
-           {{ news.resume | raw}}
-       </p>
-       <p class="date">Publié le {{ news.createdAt | date("d/m/Y")}} </p>
-       {#
-       <p>
-       {% if news.brochureFilename %}
-       <div class="img-fluid">
-           <a href="{{ asset('uploads/' ~ news.brochureFilename) }}">Télécharger le document (PDF)</a>
-
-       </div>
-        {% endif %}
-       </p>
-       #}
-
-   </div>
-</div>
 {% endblock %}

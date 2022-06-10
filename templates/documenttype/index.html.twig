@@ -38,9 +38,9 @@
             border-bottom-left-radius: unset;
         }
 
-		hr.featurette-divider {
-			height: .5px;
-		}
+        hr.featurette-divider {
+            height: .5px;
+        }
 
 	</style>
 {% endblock %}
@@ -73,7 +73,7 @@
 									{{ form_row(form.keyword) }}
 								</div>
 								{{ form_label(form.categories) }}
-								<div class="row my-2 py-2 border-top border-bottom">
+								<div class="row my-2 py-2 border-flush">
 									{% for i in 0..form.categories|length-1 %}
 										<div class="col-3">
 											{{ form_widget(form.categories[i]) }}
@@ -89,6 +89,9 @@
 										{{ form_row(form.toDate) }}
 									</div>
 								</div>
+								<div class="pb-3">
+									{{ form_widget(form.submit, {'attr' : {'class' : 'searchBtn'}}) }}
+								</div>
 								{{ form_rest(form) }}
 								{{ form_end(form) }}
 							</div>
@@ -101,10 +104,14 @@
 
 		<div class="container">
 			{% for document in documents %}
-				<a href="{{ path('showDocument', {'slug':document.slug}) }}"
+				<a href="{{ path('showDocument', {'slug':document.slug}) }}" class="link-card"
 				   style="color: black; text-decoration: none; padding: 0; text-transform: none">
-					<div class="member-entry fw-normal p-1">
-						<div class="row member-details w-100 m-0">
+					<div class="card card-custom mt-3 brd-primary">
+						<div class="card-header p-0 d-flex justify-content-between align-items-center">
+							<p class=" card-name h4 mb-0 p-2 d-inline-block bgrd-primary-light color-accent-light"> {{ document.title }} </p>
+							<p class="m-0 px-3">{{ document.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</p>
+						</div>
+						<div class="card-body">
 							{% if document.picture %}
 								<div class="col-4 p-0">
 									<img class="img-fluid rounded"
@@ -112,28 +119,23 @@
 										 alt="{{ document.title }}">
 								</div>
 							{% endif %}
-							<div class="col-{% if document.picture %}8{% else %}12{% endif %} p-3">
+							<div class="col-{% if document.picture %}8{% else %}12{% endif %}">
 								<div class="d-flex h-100 flex-column justify-content-between">
-									<div class="d-flex w-100 justify-content-between mb-2">
-										<h3 class="h4">[{{ document.categorydonnees }}] {{ document.title }}</h3>
-										<p class="m-0">{{ document.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</p>
+									<div>
+										<i class="fas fa-briefcase"></i>
+										<p class="d-inline-block">{{ document.categorydonnees }}</p>
 									</div>
-									<p style="font-size: 1rem">{{ document.getSummary }}</p>
-									<p class="m-0">Auteur(s) :
-										{% for author in document.author %}
-											{% if loop.index != 1 %}
-												{{ ', ' }}
-											{% endif %}
-											{{ author.getFullName }}
-										{% endfor %}
-									</p>
+									<div>
+										<i class="fas fa-question"></i>
+										<p class="d-inline-block">{{ document.getSummary }}</p>
+									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</a>
 			{% endfor %}
-			<div class="d-flex justify-content-center">
+			<div class="d-flex justify-content-center mt-3">
 				{% do documents.setPageRange(5) %}
 				{{ knp_pagination_render(documents, 'pagination/pagination.html.twig') }}
 			</div>

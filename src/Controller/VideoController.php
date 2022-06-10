@@ -28,14 +28,17 @@ class VideoController extends AbstractController
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$keyword = $form->get('keyword')->getData();
-			$videos = null;
+			$from = $form->get('fromDate')->getData();
+			$to = $form->get('toDate')->getData();
+			$videos = $this->getDoctrine()->getRepository(Video::class)
+			->findWithSearch($keyword, $from, $to);
 		}
 		else {
 			$videos = $this->getDoctrine()->getRepository(Video::class)
 				->findBy(['isActive' => true], ['createdAt' => 'DESC']);
 		}
 
-		$videos = $paginator->paginate($videos, $request->query->get('page', 1, 6));
+		$videos = $paginator->paginate($videos, $request->query->get('page', 1), 1);
 
 		return $this->render('video/index.html.twig', [
 			'videos' => $videos,

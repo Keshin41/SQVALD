@@ -21,6 +21,38 @@ class VideoRepository extends ServiceEntityRepository
         parent::__construct($registry, Video::class);
     }
 
+
+	public function findWithSearch($keyword, $from, $to) {
+		$builder = $this
+			->createQueryBuilder('v')
+			->andWhere('v.isActive = true')
+			->orderBy('v.createdAt', 'DESC');
+		if (!empty($keyword)) {
+			$builder
+				->andWhere('v.title LIKE :keyword')
+				->setParameter('keyword', '%'.$keyword.'%');
+		}
+		if (!empty($from) && !empty($to)) {
+			$builder
+				->andWhere('v.createdAt BETWEEN :from AND :to OR v.updateAt BETWEEN :from AND :to')
+				->setParameter('from', $from)
+				->setParameter('to', $to);
+		}
+		elseif (!empty($from)) {
+			$builder
+				->andWhere('v.createdAt >= :from OR v.updateAt >= :from')
+				->setParameter('from', $from);
+		}
+		elseif (!empty($to)) {
+			$builder
+				->andWhere('v.createdAt <= :to OR v.updateAt <= :to')
+				->setParameter('to', $to);
+		}
+		return $builder->getQuery()->getResult();
+	}
+
+
+
     /**
      * @throws ORMException
      * @throws OptimisticLockException

@@ -29,7 +29,7 @@ class DocumentsType extends AbstractType
 				'class' => CategoryDonnees::class,
 				'choice_label' => 'name',
 				'placeholder' => 'Choisir une catégorie',
-				'label' => 'Catégory'
+				'label' => 'Catégorie'
 			])
 			->add('title', TextType::class, ['label' => 'Titre'])
 			->add('resume', TextareaType::class, ['required' => false, 'label' => 'Résumé'])

@@ -101,25 +101,6 @@ class EventRepository extends ServiceEntityRepository
 					->andWhere('e.dateBegin >= :date');
 			}
 		}
-
-
-		// TODO 2022/05/03 començant avant début et finissant après fin + rename label form
-		if (!empty($before) && !empty($after)) {
-			$builder
-				->andWhere('e.dateBegin <= :before AND e.date')
-				->setParameter('from', $before)
-				->setParameter('to', $after);
-		}
-		elseif (!empty($before)) {
-			$builder
-				->andWhere('e.createdAt >= :from OR e.updateAt >= :from')
-				->setParameter('from', $before);
-		}
-		elseif (!empty($after)) {
-			$builder
-				->andWhere('e.createdAt <= :to OR e.updateAt <= :to')
-				->setParameter('to', $after);
-		}
 		return $builder->getQuery()->getResult();
 	}
 }

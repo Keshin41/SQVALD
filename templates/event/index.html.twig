@@ -41,15 +41,6 @@
         hr.featurette-divider {
             height: .5px;
         }
-
-		.border-flush {
-            border-top: 1px solid black;
-            border-bottom: 1px solid black;
-		}
-
-		#search_event_date::-webkit-calendar-picker-indicator {
-			filter: invert(1);
-		}
 	</style>
 {% endblock %}
 
@@ -108,7 +99,7 @@
 									</div>
 								</div>
 								<div class="pb-3">
-									{{ form_widget(form.submit) }}
+									{{ form_widget(form.submit, {'attr' : {'class' : 'searchBtn'}}) }}
 								</div>
 								{{ form_rest(form) }}
 								{{ form_end(form) }}
@@ -119,44 +110,50 @@
 			</div>
 		</div>
 		<hr class="featurette-divider mt-0 mb-0">
-			<div>
-				<div class="container">
-					{% for event in events %}
-						<a href="{{ path('showEvent', {'slug':event.slug}) }}"
-						   style="color: black; text-decoration: none; padding: 0; text-transform: none">
-							<div class="member-entry fw-normal p-2">
-								<div class="row member-details w-100 m-0">
-									<div class="d-flex h-100 flex-column justify-content-between">
-										<div class="d-flex w-100 justify-content-between mb-0">
-											<h3 class="h4 mb-0">[{{ event.category }}] {{ event.title }}</h3>
-											<p class="m-0">{{ event.createdAt|format_datetime(locale='fr',pattern='d MMM Y') }}</p>
-										</div>
-										<div class="d-flex w-100 justify-content-between">
-											<p class="mb-0">
-												Du {{ event.dateBegin|format_datetime(locale='fr',pattern='d MMM Y') }}
-												au {{ event.dateEnd|format_datetime(locale='fr',pattern='d MMM Y') }}</p>
-											<p class="mb-2">{{ event.place }}</p>
-										</div>
-										<p style="font-size: 1rem">{{ event.getSummary }}</p>
-										<p class="m-0">Auteur(s) :
-											{% for author in event.author %}
-												{% if loop.index != 1 %}
-													{{ ', ' }}
-												{% endif %}
-												{{ author.getFullName }}
-											{% endfor %}
+		<div>
+			<div class="container">
+				{% for event in events %}
+					<a href="{{ path('showEvent', {'slug':event.slug}) }}" class="link-card"
+					   style="color: black; text-decoration: none; padding: 0; text-transform: none; font-weight: normal">
+						<div class="card card-custom mt-3 brd-primary">
+							<div class="card-header p-0">
+								<p class=" card-name h4 mb-0 p-2 d-inline-block bgrd-primary-light color-accent-light"> {{ event.title }} </p>
+							</div>
+
+							<div class="card-body">
+								<div class="row">
+									<div class="col-4 d-flex flex-column justify-content-between">
+										<p>
+											<i class="fas fa-briefcase"></i>
+											{{ event.category.name }}
+										</p>
+										<p>
+											<i class="fa fa-calendar"></i>
+											Du {{ event.dateBegin|date('d-m-Y') }} au {{ event.dateEnd|date('d-m-Y') }}
+										</p>
+										<p class="mb-0">
+											{% if event.place %}
+												<i class="fas fa-map-marker-alt"></i>
+												{{ event.place }}
+											{% endif %}
 										</p>
 									</div>
+									{% if event.resume %}
+										<div class="col-8">
+											<p class="d-inline-block">{{ event.resume }}</p>
+										</div>
+									{% endif %}
 								</div>
 							</div>
-						</a>
-					{% endfor %}
-					<div class="d-flex justify-content-center">
-						{% do events.setPageRange(5) %}
-						{{ knp_pagination_render(events, 'pagination/pagination.html.twig') }}
-					</div>
+						</div>
+					</a>
+				{% endfor %}
+				<div class="d-flex justify-content-center">
+					{% do events.setPageRange(5) %}
+					{{ knp_pagination_render(events, 'pagination/pagination.html.twig') }}
 				</div>
 			</div>
+		</div>
 	</main>
 {% endblock %}
 

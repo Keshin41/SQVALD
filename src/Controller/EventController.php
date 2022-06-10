@@ -48,14 +48,14 @@ class EventController extends AbstractController
 			$keyword = $form->get('keyword')->getData();
 			$place = $form->get('place')->getData();
 			$categoriesRaw = $form->get('categories')->getData();
-			$isEndBofore = $form->get('isEndBefore')->getData();
+			$isEndBefore = $form->get('isEndBefore')->getData();
 			$date = $form->get('date')->getData();
 			$categories = [];
 			foreach ($categoriesRaw as $categoryRaw) {
 				$categories[] = $categoryRaw->getId();
 			}
 			$events = $this->getDoctrine()->getRepository(Event::class)
-				->findWithSearch($keyword, $place, $categories, $isEndBofore, $date);
+				->findWithSearch($keyword, $place, $categories, $isEndBefore, $date);
 		}
 		else {
 			$events = $this->getDoctrine()->getRepository(Event::class)
